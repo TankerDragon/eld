@@ -40,16 +40,15 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'djoser',
+    'corsheaders',
     'debug_toolbar',
     'api',
     'core'
 ]
 
-INTERNAL_IPS = [
-    '127.0.0.1'
-]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -156,11 +155,23 @@ SIMPLE_JWT = {
 
 AUTH_USER_MODEL = 'core.User'
 
-#https://djoser.readthedocs.io/
+# https://djoser.readthedocs.io/
 
 DJOSER = {
     'SERIALIZERS': {
         'user_create': 'core.serializers.UserCreateSerializer',
-        'current_user': 'core.serializers.UserSerializer'
+        'user': 'core.serializers.UserSerializer',
+        'current_user': 'core.serializers.UserSerializer',
     }
 }
+
+# CORS_ALLOWED_ORIGINS  = [
+#     "http://localhost:3000",
+# ]
+
+CORS_ALLOW_ALL_ORIGINS = True
+
+#debug toolbar
+INTERNAL_IPS = [ 
+    '127.0.0.1'
+]
