@@ -5,6 +5,8 @@ import { Route, Routes } from "react-router-dom";
 import Units from "./Units";
 import Logs from "./Logs";
 import Drivers from "./Drivers";
+import Driver from "./Driver";
+import NewDriver from "./NewDriver";
 import Vehicles from "./Vehicles";
 import Users from "./Users";
 
@@ -15,6 +17,8 @@ function Pages() {
         <Route path="/units" element={<Units />} />
         <Route path="/logs" element={<Logs />} />
         <Route path="/drivers" element={<Drivers />} />
+        <Route path="/driver/:id" element={<Driver />} />
+        <Route path="/new-driver" element={<NewDriver />} />
         <Route path="/vehicles" element={<Vehicles />} />
         <Route path="/users" element={<Users />} />
       </Routes>

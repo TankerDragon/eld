@@ -1,4 +1,3 @@
-import React from "react";
 import styled from "styled-components";
 import { NavLink } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -12,7 +11,7 @@ function Drivers() {
   }, []);
 
   const getDrivers = async () => {
-    const response = await fetch(`http://127.0.0.1:8000/api/drivers/`);
+    const response = await fetch(`/api/drivers/`);
     const data = await response.json();
     console.log(data);
     setDrivers(data);

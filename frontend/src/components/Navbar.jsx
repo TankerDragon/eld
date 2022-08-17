@@ -96,4 +96,7 @@ const SLink = styled(NavLink)`
     cursor: pointer;
     background: #3bd5ff;
   }
+  &.active {
+    background: yellowgreen;
+  }
 `;
