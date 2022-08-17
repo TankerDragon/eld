@@ -115,14 +115,15 @@ FUEL_TYPE = (
 
 class Driver(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, null=True, on_delete=models.CASCADE)
-    cdl_number = models.CharField(max_length=20, null=True, unique=True)
-    cdl_state = models.CharField(max_length=2, choices=STATES, default='NY')
+    cdl_number = models.CharField(max_length=20, unique=True)
+    cdl_state = models.CharField(max_length=2, choices=STATES, default='AK')
     # vehicle = models.OneToOneField(Vehicle, blank=True, null=True, on_delete=models.SET_NULL)
     co_driver = models.OneToOneField('self', null=True, on_delete=models.SET_NULL)
-    company_user_id = models.CharField(max_length=15, null=True)
-    phone = models.CharField(max_length = 10, null=True)
+    company_user_id = models.CharField(max_length=15, null=True) #
+    phone = models.CharField(max_length = 10, null=True, blank=True)
+    address = models.CharField(max_length=127, null=True)
     app_version = models.CharField(max_length=5, null=True)
-    notes = models.CharField(max_length=255, null=True)
+    notes = models.CharField(max_length=255, null=True, blank=True)
     is_active = models.BooleanField(default=1)
 
     def __str__(self):
@@ -135,12 +136,12 @@ class Vehicle(models.Model):
     make = models.CharField(max_length=15, null=True)
     model = models.CharField(max_length=20, null=True)
     year = models.CharField(max_length=2, choices=YEARS, default=DEFAULT_YEAR)
-    license_state = models.CharField(max_length=2, choices=STATES, default='NY')
+    license_state = models.CharField(max_length=2, choices=STATES, default='AK')
     license_number = models.CharField(max_length=20, null=True)
     vin_number = models.CharField(max_length=20, null=True)
     fuel_type = models.CharField(max_length=2, choices=FUEL_TYPE, default='di')
     eld_device = models.CharField(max_length=16, null=True)
-    notes = models.CharField(max_length=255, null=True)
+    notes = models.CharField(max_length=255, null=True, blank=True)
     is_active = models.BooleanField(default=1)
 
     def __str__(self):
