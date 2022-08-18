@@ -19,7 +19,7 @@ class VehicleSerializer(ModelSerializer):
     driver_id = serializers.IntegerField(required=False)
     class Meta:
         model = Vehicle
-        fields = ['id', 'driver_id', 'unit_number', 'make', 'model', 'year', 'license_number', 'license_state', 'fuel_type', 'notes']
+        fields = ['id', 'driver_id', 'unit_number', 'make', 'model', 'license_number', 'license_state', 'notes']
 
 class LogSerializer(ModelSerializer):
     class Meta:
