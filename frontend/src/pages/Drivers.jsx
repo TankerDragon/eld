@@ -63,8 +63,6 @@ function Drivers() {
   );
 }
 
-export default Drivers;
-
 const Container = styled.div`
   background: lightseagreen;
   width: calc(100% - 40px);
@@ -130,3 +128,5 @@ const STable = styled.table`
     }
   }
 `;
+
+export default Drivers;

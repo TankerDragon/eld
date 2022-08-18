@@ -8,6 +8,7 @@ import Drivers from "./Drivers";
 import Driver from "./Driver";
 import NewDriver from "./NewDriver";
 import Vehicles from "./Vehicles";
+import NewVehicle from "./NewVehicle";
 import Users from "./Users";
 
 function Pages() {
@@ -20,6 +21,7 @@ function Pages() {
         <Route path="/driver/:id" element={<Driver />} />
         <Route path="/new-driver" element={<NewDriver />} />
         <Route path="/vehicles" element={<Vehicles />} />
+        <Route path="/new-vehicle" element={<NewVehicle />} />
         <Route path="/users" element={<Users />} />
       </Routes>
     </Container>
