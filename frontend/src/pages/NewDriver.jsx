@@ -1,8 +1,24 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 
 function NewDriver({ history }) {
+  const navigate = useNavigate();
+
+  const [driverSelections, setDriverSelections] = useState([]);
+  const [vehicleSelections, setVehicleSelections] = useState([]);
+  useEffect(() => {
+    getSelections();
+  }, []);
+
+  const getSelections = async () => {
+    const response = await fetch(`/api/new-driver/`);
+    const data = await response.json();
+    console.log(data);
+    setDriverSelections(data.drivers);
+    setVehicleSelections(data.vehicles)
+  };
+
   const [driver, setDriver] = useState({
     first_name: "",
     last_name: "",
@@ -19,7 +35,6 @@ function NewDriver({ history }) {
       notes: "",
     },
   });
-  const navigate = useNavigate();
 
   const updateData = (obj, value, is_profile) => {
     if (is_profile) {
@@ -32,7 +47,7 @@ function NewDriver({ history }) {
   };
 
   const postNewDriver = async () => {
-    const response = await fetch(`/api/drivers/`, {
+    const response = await fetch(`/api/new-driver/`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -90,11 +105,13 @@ function NewDriver({ history }) {
         </InputField>
         <InputField>
           <label>Vehicle</label>
-          <select name="cars" id="cars">
-            <option value="volvo">Volvo</option>
-            <option value="saab">Saab</option>
-            <option value="mercedes">Mercedes</option>
-            <option value="audi">Audi</option>
+          <select name="vehicles" id="vehicles" onChange={(e) => e.target.value === "0" ? updateData("vehicle", null, true) : updateData("vehicle", parseInt(e.target.value), true)}>
+            <option value="0">------</option>
+            {vehicleSelections.map((vehicle) => {
+              return (
+                <option key={vehicle.id} value={vehicle.id}>{vehicle.unit_number}</option>
+              )
+            })}
           </select>
         </InputField>
         <InputField>

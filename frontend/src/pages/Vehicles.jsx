@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import { NavLink } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { DiAndroid } from "react-icons/di";
 import { ImPencil, ImCross } from "react-icons/im";
 
 function Vehicles() {
@@ -25,14 +24,16 @@ function Vehicles() {
       </Row>
       <STable>
         <thead>
-          <th>№</th>
-          <th>Unit number</th>
-          <th>Driver</th>
-          <th>Make / Model</th>
-          <th>Plate number</th>
-          <th>License state</th>
-          <th>notes</th>
-          <th>Actions</th>
+          <tr>
+            <th>№</th>
+            <th>Unit number</th>
+            <th>Driver</th>
+            <th>Make / Model</th>
+            <th>Plate number</th>
+            <th>License state</th>
+            <th>notes</th>
+            <th>Actions</th>
+          </tr>
         </thead>
         <tbody>
           {vehicles.map((vehicle, index) => {

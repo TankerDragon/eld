@@ -25,15 +25,17 @@ function Drivers() {
       </Row>
       <STable>
         <thead>
-          <th>№</th>
-          <th>First name</th>
-          <th>Last name</th>
-          <th>Username</th>
-          <th>Co-Driver</th>
-          <th>Vehicle</th>
-          <th>App version</th>
-          <th>Device info</th>
-          <th>Actions</th>
+          <tr>
+            <th>№</th>
+            <th>First name</th>
+            <th>Last name</th>
+            <th>Username</th>
+            <th>Co-Driver</th>
+            <th>Vehicle</th>
+            <th>App version</th>
+            <th>Device info</th>
+            <th>Actions</th>
+          </tr>
         </thead>
         <tbody>
           {drivers.map((driver, index) => {
