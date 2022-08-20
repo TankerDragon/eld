@@ -11,6 +11,7 @@ from .models import Driver, Vehicle, Log
 
 class DriverSerializer(ModelSerializer):
     user_id = serializers.IntegerField(read_only=True)
+    app_version = serializers.CharField(read_only=True)
     class Meta:
         model = Driver
         fields = ['id', 'user_id', 'cdl_number', 'cdl_state', 'co_driver', 'notes', 'phone', 'app_version']

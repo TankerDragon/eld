@@ -7,5 +7,6 @@ urlpatterns = [
     path('drivers/', views.getDrivers, name='drivers'),
     path('new-driver/', views.newDriver, name='new-driver'),
     path('vehicles/', views.getVehicles, name='vehicles'),
+    path('new-vehicle/', views.newVehicle, name='new-vehicle'),
     path('test/', views.test)
 ]
