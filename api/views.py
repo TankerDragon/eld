@@ -5,15 +5,15 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework import status
 from django.conf import settings
 from django.db.models import Q
-from .serializers import DriverSerializer, VehicleSerializer
+from .serializers import DriverSerializer, UpdateDriverSerializer, VehicleSerializer, UpdateVehicleSerializer
 from core.serializers import UserSerializer, UserCreateSerializer
 from core.models import User
 from .models import Driver, Vehicle
 
 # Create your views here.
-
-def test(request):
-    return HttpResponse('test')
+@api_view(['GET', 'PATCH'])
+def test(request, id):
+    pass
 
 @api_view()
 def main(request):
@@ -112,6 +112,84 @@ def newDriver(request):
         return Response({"user": user.errors, "profile": profile.errors}, status=status.HTTP_400_BAD_REQUEST)
     
 
+@api_view(['GET', 'PATCH'])
+def updateDriver(request, id):
+    if request.method == 'GET':
+        driver = Driver.objects.get(pk=id)
+        user = User.objects.get(pk=driver.user_id)
+        try:
+            vehicle = Vehicle.objects.get(driver_id = driver.id)
+        except:
+            vehicle = None
+        driver_serializer = DriverSerializer(driver)
+        user_serializer = UserSerializer(user)
+
+        driver_data = driver_serializer.data
+        # adding vehicle unit number to driver
+        if vehicle:
+            driver_data["vehicle_unit_number"] = vehicle.unit_number
+            driver_data["vehicle"] = vehicle.id
+        else:
+            driver_data["vehicle_unit_number"] = None
+            driver_data["vehicle"] = None
+
+        #adding driver fields to user
+        user_data = user_serializer.data
+        user_data["profile"] = driver_data
+
+        # adding driver's co driver name if there is
+        if user_data["profile"]["co_driver"]:
+            co_driver = Driver.objects.get(pk=user_data["profile"]["co_driver"])
+            co_user = User.objects.get(pk=co_driver.user_id)
+            user_data["profile"]["co_driver_name"] = co_user.first_name + ' ' + co_user.last_name
+        else:
+            user_data["profile"]["co_driver_name"] = None
+
+        return Response(user_data)
+    
+    if request.method == 'PATCH':
+        driver = Driver.objects.get(pk=id)
+        user = User.objects.get(pk=driver.user_id)
+        updated_user_serializer = UserSerializer(instance=user, data=request.data)
+        updated_driver_serializer = UpdateDriverSerializer(instance=driver, data=request.data.get("profile"))
+        valid_user = updated_user_serializer.is_valid()
+        valid_driver = updated_driver_serializer.is_valid()
+
+        #check the assigned vehicle
+        assigned_vehicle_id = request.data.get("profile").get("vehicle")
+        assigned_vehicle = None
+        if assigned_vehicle_id:
+            assigned_vehicle = Vehicle.objects.get(pk = assigned_vehicle_id)
+            # !!! if assigned_vehicle is not in database there will be error
+        
+        #check the assigned co driver
+        assigned_co_driver_id = request.data.get("profile").get("co_driver")
+        assigned_co_driver = None
+        if assigned_co_driver_id:
+            assigned_co_driver = Driver.objects.get(pk = assigned_co_driver_id)
+            # !!! if assigned_co_driver is not in database there will be error
+        
+        if valid_user and valid_driver:
+            if (not assigned_vehicle or assigned_vehicle.driver_id == None or assigned_vehicle.driver_id == driver.id) and (not assigned_co_driver or assigned_co_driver.co_driver_id == None or assigned_co_driver.co_driver_id == driver.id):
+                saved_user = updated_user_serializer.save()
+                saved_driver = updated_driver_serializer.save()
+                # # clone user and profile together
+                # saved_profile.user_id = saved_user.id
+                # saved_profile.save()
+                # saving vehicle if there was assigned and not already assigned
+                if assigned_vehicle_id and not assigned_vehicle.driver_id == driver.id:
+                    assigned_vehicle.driver_id = saved_driver.id
+                    assigned_vehicle.save()
+                # saving co driver if there was assigned and not already assigned
+                if assigned_co_driver_id and not assigned_co_driver.co_driver_id == driver.id:
+                    assigned_co_driver.co_driver_id = saved_driver.id
+                    assigned_co_driver.save()
+                
+                return Response({"success": "driver has been added successfully"}, status=status.HTTP_200_OK)
+            # else: # there we can do something if there was requested to assign invalid vehicle or co driver
+        return Response({"user": updated_user_serializer.errors, "profile": updated_driver_serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+
+
 @api_view(['GET'])
 # @permission_classes([IsAuthenticated])
 def getVehicles(request):
@@ -150,3 +228,20 @@ def newVehicle(request):
             vehicle.save()
             return Response({"success": "vehicle has been added successfully"}, status=status.HTTP_200_OK)
         return Response(vehicle.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET', 'PATCH'])
+def updateVehicle(request, id):
+    if request.method == 'GET':
+        vehicle = Vehicle.objects.get(pk=id)
+        vehicle_serializer = VehicleSerializer(vehicle)
+        return Response(vehicle_serializer.data, status=status.HTTP_200_OK)
+
+    if request.method == 'PATCH':
+        vehicle = Vehicle.objects.get(pk=id)
+        updated_vehicle_serializer = UpdateVehicleSerializer(instance=vehicle, data=request.data)
+
+        if updated_vehicle_serializer.is_valid():
+            updated_vehicle_serializer.save()
+            return Response({"success": "vehicle has been successfully updated"}, status=status.HTTP_200_OK)
+        return Response(updated_vehicle_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
