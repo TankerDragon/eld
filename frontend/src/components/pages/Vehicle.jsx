@@ -1,8 +1,13 @@
-import { useState } from "react";
-import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+// import styles
+import { Style } from "../styles/Style.style";
 
-function NewVehicle() {
+function Vehicle() {
+  let params = useParams();
+
+  const navigate = useNavigate();
+
   const [vehicle, setVehicle] = useState({
     unit_number: "",
     make: "",
@@ -13,15 +18,29 @@ function NewVehicle() {
     fuel_type: "di",
     notes: "",
   });
-  const navigate = useNavigate();
+
+  useEffect(() => {
+    getVehicle();
+  }, []);
+
+  const getVehicle = async () => {
+    const response = await fetch(`/api/vehicle/` + params.id);
+    const data = await response.json();
+    console.log(data);
+    setVehicle(data);
+  };
 
   const updateData = (obj, value) => {
     setVehicle({ ...vehicle, [obj]: value });
   };
 
-  const postNewVehicle = async () => {
-    const response = await fetch(`/api/vehicles/`, {
-      method: "POST",
+  const redirectBack = () => {
+    navigate("/vehicles");
+  };
+
+  const patchVehicle = async () => {
+    const response = await fetch(`/api/vehicle/` + params.id, {
+      method: "PATCH",
       headers: {
         "Content-Type": "application/json",
       },
@@ -39,35 +58,32 @@ function NewVehicle() {
     // setDrivers(data);
   };
 
-  const redirectBack = () => {
-    navigate("/vehicles");
-  };
-
   const handleSubmit = () => {
     console.log(vehicle);
-    postNewVehicle();
+    patchVehicle();
   };
+
   return (
-    <Container>
-      <Row>
-        <h1>New Vehicle</h1>
-      </Row>
-      <Row>
-        <InputField>
+    <Style.Container>
+      <Style.Row>
+        <h1>Update Vehicle</h1>
+      </Style.Row>
+      <Style.Row>
+        <Style.InputField>
           <label>Unit number*</label>
           <input onChange={(e) => updateData("unit_number", e.target.value)} type="text" value={vehicle.unit_number} />
-        </InputField>
-        <InputField>
+        </Style.InputField>
+        <Style.InputField>
           <label>Make</label>
           <input onChange={(e) => updateData("make", e.target.value)} type="text" value={vehicle.make} />
-        </InputField>
-        <InputField>
+        </Style.InputField>
+        <Style.InputField>
           <label>Model</label>
           <input onChange={(e) => updateData("model", e.target.value)} type="text" value={vehicle.model} />
-        </InputField>
-      </Row>
-      <Row>
-        <InputField>
+        </Style.InputField>
+      </Style.Row>
+      <Style.Row>
+        <Style.InputField>
           <label>Year</label>
           <select name="years" id="select-year" onChange={(e) => updateData("year", e.target.value)} value={vehicle.year}>
             <option value="99">1999</option>
@@ -97,12 +113,12 @@ function NewVehicle() {
             <option value="23">2023</option>
             <option value="24">2024</option>
           </select>
-        </InputField>
-        <InputField>
+        </Style.InputField>
+        <Style.InputField>
           <label>License Plate No</label>
           <input onChange={(e) => updateData("license_number", e.target.value)} type="text" value={vehicle.license_number} />
-        </InputField>
-        <InputField>
+        </Style.InputField>
+        <Style.InputField>
           <label>License Plate Issuing State</label>
           <select name="states" id="select-state" onChange={(e) => updateData("license_state", e.target.value)} value={vehicle.license_state}>
             <option value="AK">Alaska</option>
@@ -156,10 +172,10 @@ function NewVehicle() {
             <option value="WV">West Virginia</option>
             <option value="WY">Wyoming</option>
           </select>
-        </InputField>
-      </Row>
-      <Row>
-        <InputField>
+        </Style.InputField>
+      </Style.Row>
+      <Style.Row>
+        <Style.InputField>
           <label>Fuel Type</label>
           <select name="fuel-type" id="fuel-type" onChange={(e) => updateData("fuel_type", e.target.value)} value={vehicle.fuel_type}>
             <option value="99">1999</option>
@@ -175,90 +191,24 @@ function NewVehicle() {
             <option value="bi">Biodisel</option>
             <option value="o">Other</option>
           </select>
-        </InputField>
-        <InputField>
+        </Style.InputField>
+        <Style.InputField>
           <label>Notes</label>
           <input onChange={(e) => updateData("notes", e.target.value)} type="text" value={vehicle.notes} />
-        </InputField>
-        <InputField>
+        </Style.InputField>
+        <Style.InputField>
           <label>ELD device</label>
           <input type="text" />
-        </InputField>
-      </Row>
-      <Buttons>
+        </Style.InputField>
+      </Style.Row>
+      <Style.Buttons>
         <div>
           <button onClick={redirectBack}>Cancel</button>
           <button onClick={handleSubmit}>OK</button>
         </div>
-      </Buttons>
-    </Container>
+      </Style.Buttons>
+    </Style.Container>
   );
 }
 
-const Container = styled.div`
-  background: lightseagreen;
-  width: calc(100% - 40px);
-  margin: auto;
-  margin-top: 50px;
-  min-height: 80vh;
-  border-radius: 20px;
-  padding: 20px;
-`;
-
-const Row = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-
-  h1 {
-    font-size: 1.5rem;
-    color: #1d1d1d;
-  }
-`;
-
-const InputField = styled.div`
-  margin-top: 30px;
-  width: 300px;
-
-  label {
-    color: #4b4b4b;
-    display: block;
-    font-size: 0.9rem;
-    margin-bottom: 5px;
-  }
-  input,
-  select {
-    outline: none;
-    width: 100%;
-    font-size: 1rem;
-    padding: 7px 10px;
-    border-radius: 20px;
-    border: 1px solid #4b4b4b;
-  }
-  select {
-    width: 100%;
-  }
-`;
-
-const Buttons = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-top: 50px;
-
-  div {
-    width: 290px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  button {
-    cursor: pointer;
-    width: 135px;
-    padding: 8px 0;
-    border: 1px solid #4b4b4b;
-    border-radius: 5px;
-  }
-`;
-
-export default NewVehicle;
+export default Vehicle;

@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
-import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
+// import styles
+import { Style } from "../styles/Style.style";
 
-function NewDriver({ history }) {
+
+function NewDriver() {
   const navigate = useNavigate();
 
   const [driverSelections, setDriverSelections] = useState([]);
@@ -76,34 +78,34 @@ function NewDriver({ history }) {
   };
 
   return (
-    <Container>
-      <Row>
+    <Style.Container>
+      <Style.Row>
         <h1>New Driver</h1>
-      </Row>
-      <Row>
-        <InputField>
+      </Style.Row>
+      <Style.Row>
+        <Style.InputField>
           <label>First name*</label>
           <input onChange={(e) => updateData("first_name", e.target.value, false)} type="text" value={driver.first_name} />
-        </InputField>
-        <InputField>
+        </Style.InputField>
+        <Style.InputField>
           <label>Last name*</label>
           <input onChange={(e) => updateData("last_name", e.target.value, false)} type="text" value={driver.last_name} />
-        </InputField>
-        <InputField>
+        </Style.InputField>
+        <Style.InputField>
           <label>Username*</label>
           <input onChange={(e) => updateData("username", e.target.value, false)} type="text" value={driver.username} />
-        </InputField>
-        <InputField>
+        </Style.InputField>
+        <Style.InputField>
           <label>Email*</label>
           <input onChange={(e) => updateData("email", e.target.value, false)} type="text" value={driver.email} />
-        </InputField>
-      </Row>
-      <Row>
-        <InputField>
+        </Style.InputField>
+      </Style.Row>
+      <Style.Row>
+        <Style.InputField>
           <label>Password*</label>
           <input onChange={(e) => updateData("password", e.target.value, false)} type="password" value={driver.password} />
-        </InputField>
-        <InputField>
+        </Style.InputField>
+        <Style.InputField>
           <label>Vehicle</label>
           <select name="vehicles" id="vehicles" onChange={(e) => e.target.value === "0" ? updateData("vehicle", null, true) : updateData("vehicle", parseInt(e.target.value), true)}>
             <option value="0">------</option>
@@ -113,12 +115,12 @@ function NewDriver({ history }) {
               )
             })}
           </select>
-        </InputField>
-        <InputField>
+        </Style.InputField>
+        <Style.InputField>
           <label>Driver's license No*</label>
           <input onChange={(e) => updateData("cdl_number", e.target.value, true)} type="text" value={driver.profile.cdl_number} />
-        </InputField>
-        <InputField>
+        </Style.InputField>
+        <Style.InputField>
           <label>Driver's License Issuing State*</label>
           <select name="states" id="select-states" onChange={(e) => updateData("cdl_state", e.target.value, true)} value={driver.profile.cdl_state}>
             <option value="AK">Alaska</option>
@@ -172,106 +174,42 @@ function NewDriver({ history }) {
             <option value="WV">West Virginia</option>
             <option value="WY">Wyoming</option>
           </select>
-        </InputField>
-      </Row>
-      <Row>
-        <InputField>
+        </Style.InputField>
+      </Style.Row>
+      <Style.Row>
+        <Style.InputField>
           <label>Co-Driver</label>
-          <select name="cars" id="cars">
-            <option value="volvo">Volvo</option>
-            <option value="saab">Saab</option>
-            <option value="mercedes">Mercedes</option>
-            <option value="audi">Audi</option>
+          <select name="co-drivers" id="co-drivers" onChange={(e) => e.target.value === "0" ? updateData("co_driver", null, true) : updateData("co_driver", parseInt(e.target.value), true)}>
+            <option value="0">------</option>
+            {driverSelections.map((driver) => {
+              return (
+                <option key={driver.id} value={driver.id}>{driver.full_name}</option>
+              )
+            })}
           </select>
-        </InputField>
-        <InputField>
+        </Style.InputField>
+        <Style.InputField>
           <label>Home Terminal Address</label>
           <input onChange={(e) => updateData("address", e.target.value, true)} type="text" value={driver.profile.address} />
-        </InputField>
-        <InputField>
+        </Style.InputField>
+        <Style.InputField>
           <label>Phone number</label>
           <input onChange={(e) => updateData("phone", e.target.value, true)} type="text" value={driver.profile.phone} />
-        </InputField>
+        </Style.InputField>
 
-        <InputField>
+        <Style.InputField>
           <label>Notes</label>
           <input onChange={(e) => updateData("notes", e.target.value, true)} type="text" value={driver.profile.notes} />
-        </InputField>
-      </Row>
-      <Buttons>
+        </Style.InputField>
+      </Style.Row>
+      <Style.Buttons>
         <div>
           <button onClick={redirectBack}>Cancel</button>
           <button onClick={handleSubmit}>OK</button>
         </div>
-      </Buttons>
-    </Container>
+      </Style.Buttons>
+    </Style.Container>
   );
 }
-
-const Container = styled.div`
-  background: lightseagreen;
-  width: calc(100% - 40px);
-  margin: auto;
-  margin-top: 50px;
-  min-height: 80vh;
-  border-radius: 20px;
-  padding: 20px;
-`;
-
-const Row = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-
-  h1 {
-    font-size: 1.5rem;
-    color: #1d1d1d;
-  }
-`;
-
-const InputField = styled.div`
-  margin-top: 30px;
-  width: 300px;
-
-  label {
-    color: #4b4b4b;
-    display: block;
-    font-size: 0.9rem;
-    margin-bottom: 5px;
-  }
-  input,
-  select {
-    outline: none;
-    width: 100%;
-    font-size: 1rem;
-    padding: 7px 10px;
-    border-radius: 20px;
-    border: 1px solid #4b4b4b;
-  }
-  select {
-    width: 100%;
-  }
-`;
-
-const Buttons = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-top: 50px;
-
-  div {
-    width: 290px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  button {
-    cursor: pointer;
-    width: 135px;
-    padding: 8px 0;
-    border: 1px solid #4b4b4b;
-    border-radius: 5px;
-  }
-`;
 
 export default NewDriver;

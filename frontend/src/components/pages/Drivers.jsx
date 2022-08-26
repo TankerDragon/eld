@@ -1,8 +1,9 @@
-import styled from "styled-components";
-import { NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { DiAndroid } from "react-icons/di";
 import { ImPencil, ImCross } from "react-icons/im";
+// import styles
+import { Style } from "../styles/Style.style";
 
 function Drivers() {
   const [drivers, setDrivers] = useState([]);
@@ -18,12 +19,12 @@ function Drivers() {
   };
 
   return (
-    <Container>
-      <Row>
+    <Style.Container>
+      <Style.Row>
         <h1>Drivers</h1>
-        <SButton to={"/new-driver"}>Add Driver</SButton>
-      </Row>
-      <STable>
+        <Style.SButton to={"/new-driver"}>Add Driver</Style.SButton>
+      </Style.Row>
+      <Style.STable>
         <thead>
           <tr>
             <th>№</th>
@@ -45,90 +46,26 @@ function Drivers() {
                 <td>{driver.first_name}</td>
                 <td>{driver.last_name}</td>
                 <td>{driver.username}</td>
-                <td>*</td>
-                <td>*</td>
+                <td>{driver.profile.co_driver_name}</td>
+                <td>{driver.profile.vehicle_unit_number}</td>
                 <td className="android">
                   <DiAndroid />
                   {driver.profile.app_version}
                 </td>
                 <td>*</td>
                 <td className="actions">
-                  <ImPencil className="pen" />
+                  <Link to={"/driver/" + driver.profile.id}>
+                    <ImPencil className="pen" />
+                  </Link>
                   <ImCross className="cross" />
                 </td>
               </tr>
             );
           })}
         </tbody>
-      </STable>
-    </Container>
+      </Style.STable>
+    </Style.Container>
   );
 }
-
-const Container = styled.div`
-  background: lightseagreen;
-  width: calc(100% - 40px);
-  margin: auto;
-  margin-top: 50px;
-  min-height: 80vh;
-  border-radius: 20px;
-  padding: 20px;
-`;
-
-const Row = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-
-  h1 {
-    font-size: 1.5rem;
-    color: #1d1d1d;
-  }
-`;
-
-const SButton = styled(NavLink)`
-  padding: 12px 18px;
-  background: #00bfff;
-  border-radius: 20px;
-  text-decoration: none;
-  font-size: 0.9rem;
-  color: #1d1d1d;
-  font-weight: bold;
-`;
-
-const STable = styled.table`
-  width: 100%;
-  border-collapse: collapse;
-  padding: 0px;
-  margin-top: 40px;
-
-  td,
-  th {
-    border: 1px solid #1d1d1d;
-    padding: 8px 10px;
-  }
-  tr:hover {
-    background: lightblue;
-  }
-  .android {
-    color: green;
-    svg {
-      margin-right: 7px;
-    }
-  }
-  .actions {
-    .pen,
-    .cross {
-      cursor: pointer;
-    }
-    .pen {
-      color: #c49234;
-      margin-right: 25px;
-    }
-    .cross {
-      color: #c43f3f;
-    }
-  }
-`;
 
 export default Drivers;

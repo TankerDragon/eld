@@ -36,4 +36,4 @@ class UpdateVehicleSerializer(ModelSerializer):
 class LogSerializer(ModelSerializer):
     class Meta:
         model = Log
-        fields = ['id', 'driver', 'status', 'date', 'time', 'loc_name', 'lat', 'lng', 'vehicle', 'odometer', 'eng_hours', 'notes', 'document', 'trailer']
+        fields = ['id', 'driver', 'status', 'date', 'time', 'location', 'lat', 'lng', 'vehicle', 'odometer', 'eng_hours', 'notes', 'document', 'trailer']

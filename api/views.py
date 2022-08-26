@@ -1,3 +1,4 @@
+from lib2to3.pgen2 import driver
 from django.shortcuts import render, HttpResponse
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
@@ -5,10 +6,10 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework import status
 from django.conf import settings
 from django.db.models import Q
-from .serializers import DriverSerializer, UpdateDriverSerializer, VehicleSerializer, UpdateVehicleSerializer
+from .serializers import DriverSerializer, UpdateDriverSerializer, VehicleSerializer, UpdateVehicleSerializer, LogSerializer
 from core.serializers import UserSerializer, UserCreateSerializer
 from core.models import User
-from .models import Driver, Vehicle
+from .models import Driver, Vehicle, Log
 
 # Create your views here.
 @api_view(['GET', 'PATCH'])
@@ -245,3 +246,18 @@ def updateVehicle(request, id):
             updated_vehicle_serializer.save()
             return Response({"success": "vehicle has been successfully updated"}, status=status.HTTP_200_OK)
         return Response(updated_vehicle_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET', 'POST'])
+def logs(request, id, date):
+    if request.method == 'GET':
+        logs = Log.objects.filter(driver_id = id, date=date)
+        log_serializer = LogSerializer(logs, many=True)
+        return Response(log_serializer.data)
+    if request.method == 'POST':
+        new_log = LogSerializer(data=request.data)
+        if new_log.is_valid():
+            new_log.save()
+            return Response({"success": "log has added successfully"}, status=status.HTTP_200_OK)
+        return Response(new_log.errors, status=status.HTTP_400_BAD_REQUEST)
+

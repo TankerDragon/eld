@@ -1,15 +1,15 @@
 import styled from "styled-components";
-import { NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { ImPencil, ImCross } from "react-icons/im";
 
 function Vehicles() {
   const [vehicles, setVehicles] = useState([]);
   useEffect(() => {
-    getDrivers();
+    getVehicles();
   }, []);
 
-  const getDrivers = async () => {
+  const getVehicles = async () => {
     const response = await fetch(`/api/vehicles/`);
     const data = await response.json();
     console.log(data);
@@ -49,7 +49,9 @@ function Vehicles() {
                 <td>{vehicle.license_state}</td>
                 <td>{vehicle.notes}</td>
                 <td className="actions">
-                  <ImPencil className="pen" />
+                  <Link to={"/vehicle/" + vehicle.id}>
+                    <ImPencil className="pen" />
+                  </Link>
                   <ImCross className="cross" />
                 </td>
               </tr>
@@ -82,7 +84,7 @@ const Row = styled.div`
   }
 `;
 
-const SButton = styled(NavLink)`
+const SButton = styled(Link)`
   padding: 12px 18px;
   background: #00bfff;
   border-radius: 20px;
