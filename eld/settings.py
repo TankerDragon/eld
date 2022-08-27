@@ -49,7 +49,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'djoser',
-    'corsheaders',
+    # 'corsheaders',
     'debug_toolbar',
     'api',
     'core'
