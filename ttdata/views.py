@@ -18,14 +18,23 @@ def logs(request, id):
         except:
             cloned = None
         
-        if cloned and cloned.eld_id:
+        if cloned and cloned.eld_id and data:
             driver_id = cloned.eld_id
-            data["driver"] = driver_id
-            new_log = LogSerializer(data=request.data)
-            if new_log.is_valid():
-                new_log.save()
-                return Response({"success": "log has added successfully"}, status=status.HTTP_200_OK)
-            return Response(new_log.errors, status=status.HTTP_400_BAD_REQUEST)
+
+            # new_log = LogSerializer(data=request.data)
+            errors = []
+
+            for d in data:
+                d["driver"] = driver_id
+                new_log = LogSerializer(data=d)
+                if new_log.is_valid():
+                    new_log.save()
+                else:
+                    errors.append(new_log.errors)
+
+            if errors == []:
+                return Response({"success": "all good"}, status=status.HTTP_200_OK)
+            return Response(errors, status=status.HTTP_400_BAD_REQUEST)
         else:
             if not cloned:
                 new_clone = Clone()
