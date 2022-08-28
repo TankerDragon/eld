@@ -49,9 +49,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'djoser',
-    # 'corsheaders',
+    'corsheaders',
     'debug_toolbar',
     'api',
+    'ttdata',
     'core'
 ]
 
@@ -191,3 +192,13 @@ CORS_ALLOW_ALL_ORIGINS = True
 INTERNAL_IPS = [
     '127.0.0.1'
 ]
+
+# HTTPS settings
+# CSRF_COOKIE_SECURE = True
+# SESSION_COOKIE_SECURE = True
+# SECURE_SSL_REDIRECT = True
+
+# HSTS settings
+# SECURE_HSTS_SECONDS = 31536000 # 1 year
+# SECURE_HSTS_PRELOAD = True
+# SECURE_HSTS_INCLUDE_SUBDOMAINS = True
