@@ -12,6 +12,18 @@ STATUS_CHOICES = [
 ('YM', 'Yard moves'),
 ('PC', 'Personal conveyance')
 ]
+STATUS_CHOICES_TTDATA = [
+    ('OFF', 'OFF'),
+    ('SB', 'SB'),
+    ('DR', 'DR'),
+    ('YM', 'YM'),
+    ('PC', 'PC'),
+    ('LIN', 'LOGIN'),
+    ('LOU', 'LOGOUT'),
+    ('POF', 'POWER OFF'),
+    ('PON', 'POWER ON'),
+    ('CER', 'CERTIFY')
+]
 STATES = [
 ("AK", "Alaska"), 
 ("AL", "Alabama"), 
@@ -150,15 +162,15 @@ class Vehicle(models.Model):
 
 class Log(models.Model):
     driver = models.ForeignKey(Driver, on_delete=models.CASCADE)
-    status = models.CharField(max_length=3, choices= STATUS_CHOICES, default='OFF')
+    status = models.CharField(max_length=3, choices= STATUS_CHOICES_TTDATA, default='OFF')
     date = models.DateField()
     time = models.TimeField()
-    location = models.CharField(max_length=50, null=True)
-    lat = models.DecimalField(max_digits=9, decimal_places=6, null=True)
-    lng = models.DecimalField(max_digits=9, decimal_places=6, null=True)
-    vehicle = models.ForeignKey(Vehicle, on_delete=models.SET_NULL, null=True)
-    odometer = models.IntegerField(null=True)
-    eng_hours = models.DecimalField(max_digits=6, decimal_places=1, null=True)
-    notes = models.CharField(max_length=20, null=True)
-    document = models.CharField(max_length=20, null=True)
-    trailer = models.CharField(max_length=20, null=True)
+    location = models.CharField(max_length=50, null=True, blank=True)
+    lat = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
+    lng = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
+    vehicle = models.ForeignKey(Vehicle, on_delete=models.SET_NULL, null=True, blank=True)
+    odometer = models.IntegerField(null=True, blank=True)
+    eng_hours = models.DecimalField(max_digits=6, decimal_places=1, null=True, blank=True)
+    notes = models.CharField(max_length=20, null=True, blank=True)
+    document = models.CharField(max_length=20, null=True, blank=True)
+    trailer = models.CharField(max_length=20, null=True, blank=True)
