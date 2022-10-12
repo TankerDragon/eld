@@ -16,13 +16,15 @@ STATUS_CHOICES_TTDATA = [
     ('OFF', 'OFF'),
     ('SB', 'SB'),
     ('DR', 'DR'),
+    ('ON', 'ON'),
     ('YM', 'YM'),
     ('PC', 'PC'),
     ('LIN', 'LOGIN'),
     ('LOU', 'LOGOUT'),
     ('POF', 'POWER OFF'),
     ('PON', 'POWER ON'),
-    ('CER', 'CERTIFY')
+    ('CER', 'CERTIFY'),
+    ('INT', 'INTERMEDIATE')
 ]
 STATES = [
 ("AK", "Alaska"), 
