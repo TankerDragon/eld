@@ -1,15 +1,17 @@
 import imp
 from django.shortcuts import render
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework import status
 #
-from api.serializers import LogSerializer
+from api.serializers import ELogSerializer
 from .models import Clone
 
+from rest_framework.permissions import IsAuthenticated, AllowAny
 
 # Create your views here.
 @api_view(['POST'])
+@permission_classes([AllowAny])
 def logs(request, id):
     if request.method == 'POST':
         data = request.data
@@ -21,12 +23,12 @@ def logs(request, id):
         if cloned and cloned.eld_id and data:
             driver_id = cloned.eld_id
 
-            # new_log = LogSerializer(data=request.data)
+            # new_log = ELogSerializer(data=request.data)
             errors = []
 
             for d in data:
                 d["driver"] = driver_id
-                new_log = LogSerializer(data=d)
+                new_log = ELogSerializer(data=d)
                 if new_log.is_valid():
                     new_log.save()
                 else:

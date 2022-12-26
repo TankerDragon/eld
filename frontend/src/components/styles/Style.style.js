@@ -2,124 +2,21 @@ import styled from "styled-components";
 import { Link, NavLink } from "react-router-dom";
 
 export const Style = {
-  Nav: styled.div`
-    background: lightseagreen;
-    position: fixed;
-    left: 0;
-    width: 220px;
-    height: 100vh;
-    color: #1d1d1d;
+  Nav: styled.div``,
 
-    .logo-container {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 10px 0 30px 0;
-    }
+  Container: styled.div``,
 
-    h3 {
-      font-size: 1rem;
-      font-weight: bolder;
-      margin: 25px 0 10px 15px;
-    }
-  `,
+  Row: styled.div``,
 
-  Container: styled.div`
-    background: lightseagreen;
-    width: calc(100% - 40px);
-    margin: auto;
-    margin-top: 50px;
-    min-height: 80vh;
-    border-radius: 20px;
-    padding: 20px;
-  `,
+  Buttons: styled.div``,
 
-  Row: styled.div`
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  InputField: styled.div``,
 
-    h1 {
-      font-size: 1.5rem;
-      color: #1d1d1d;
-    }
-  `,
+  SLink: styled(NavLink)``,
 
-  Buttons: styled.div`
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-top: 50px;
+  SAncer: styled.a``,
 
-    div {
-      width: 290px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    button {
-      cursor: pointer;
-      width: 135px;
-      padding: 8px 0;
-      border: 1px solid #4b4b4b;
-      border-radius: 5px;
-    }
-  `,
-
-  InputField: styled.div`
-    margin-top: 30px;
-    width: 300px;
-
-    label {
-      color: #4b4b4b;
-      display: block;
-      font-size: 0.9rem;
-      margin-bottom: 5px;
-    }
-    input,
-    select {
-      outline: none;
-      width: 100%;
-      font-size: 1rem;
-      padding: 7px 10px;
-      border-radius: 20px;
-      border: 1px solid #4b4b4b;
-    }
-    select {
-      width: 100%;
-    }
-  `,
-
-  SLink: styled(NavLink)`
-    padding: 10px 15px;
-    font-weight: bold;
-    display: flex;
-    align-items: center;
-    text-decoration: none;
-    color: #1d1d1d;
-
-    svg {
-      font-size: 1.2rem;
-      margin-right: 10px;
-    }
-    :hover {
-      cursor: pointer;
-      background: #3bd5ff;
-    }
-    &.active {
-      background: yellowgreen;
-    }
-  `,
-
-  SButton: styled(Link)`
-    padding: 12px 18px;
-    background: #00bfff;
-    border-radius: 20px;
-    text-decoration: none;
-    font-size: 0.9rem;
-    color: #1d1d1d;
-    font-weight: bold;
-  `,
+  SButton: styled(Link)``,
 
   STable: styled.table`
     width: 100%;
@@ -156,31 +53,7 @@ export const Style = {
     }
   `,
 
-  Table: styled.table`
-    width: 100%;
-    border-collapse: collapse;
-    padding: 0px;
-    margin-top: 40px;
-
-    td,
-    th {
-      padding: 8px 10px;
-      text-align: left;
-    }
-    th {
-      border-bottom: 2px solid black;
-    }
-    tbody tr:hover {
-      cursor: pointer;
-      background: lightblue;
-    }
-    a {
-      width: 100%;
-      display: block;
-      text-decoration: none;
-      color: black;
-    }
-  `,
+  Table: styled.table``,
 
   Graph: styled.div`
     width: 100%;
@@ -196,6 +69,50 @@ export const Style = {
       left: 2.75%;
       width: 96.85%;
       height: 83%;
+    }
+  `,
+  BackDrop: styled.div`
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 4;
+
+    .form {
+      position: fixed;
+      background: var(--color-container);
+      width: 80%;
+      border-radius: 20px;
+      padding: 30px;
+      left: 50%;
+      box-shadow: 0px 0px 7px 0px var(--color-box-shadow);
+    }
+  `,
+  ControlBar: styled.div`
+    background: var(--color-container);
+    width: calc(100% - 40px);
+    margin: auto;
+    box-shadow: 0px 0px 7px 0px var(--color-box-shadow);
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+    padding: 15px;
+  `,
+  ModeChanger: styled.div`
+    padding: 5px;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background-color: var(--color-mode-changer-background);
+    color: var(--color-mode-changer-color);
+    &:hover {
+      cursor: pointer;
+    }
+    svg {
+      font-size: 1.5rem;
     }
   `,
 };

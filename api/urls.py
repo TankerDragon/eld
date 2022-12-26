@@ -1,15 +1,22 @@
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView
+)
+from core.views import MyTokenObtainPairView
+
 from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('', views.main),
-    path('test/<int:id>', views.test),
-    # path('users/', views.getUsers, name='users'),
-    path('drivers/', views.getDrivers, name='drivers'),
-    path('driver/<int:id>', views.updateDriver, name='driver'),
-    path('new-driver/', views.newDriver, name='new-driver'),
-    path('vehicles/', views.getVehicles, name='vehicles'),
-    path('vehicle/<int:id>', views.updateVehicle, name='vehicle'),
-    path('new-vehicle/', views.newVehicle, name='new-vehicle'),
-    path('logs/<int:id>/<date>', views.logs, name='log'),
+    path('test/', views.test),
+    #
+    path('register/', views.register),
+    #
+    path('token/', MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    # path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('gross/', views.gross),
+    path('drivers/', views.drivers),
+    path('users/', views.users),
+
 ]

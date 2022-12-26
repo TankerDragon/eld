@@ -1,11 +1,20 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
+import { HashRouter } from "react-router-dom";
+import { AuthProvider } from "./context/AuthProvider";
+import { MessageProvider } from "./context/MessageProvider";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <App />
+    <HashRouter>
+      <AuthProvider>
+        <MessageProvider>
+          <App />
+        </MessageProvider>
+      </AuthProvider>
+    </HashRouter>
   </React.StrictMode>
 );
 
