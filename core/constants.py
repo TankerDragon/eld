@@ -152,3 +152,5 @@ FUEL_TYPE = (
 ('bi', 'Biodisel'),
 ('o', 'Other'),
 )
+
+WEEKDAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']

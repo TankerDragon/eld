@@ -1,7 +1,6 @@
 # data['date'] = datetime.date.today()
 # data['time'] = datetime.datetime.now().strftime("%H:%M:%S")
 ###
-from lib2to3.pgen2 import driver
 from django.shortcuts import render, HttpResponse
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
@@ -10,38 +9,14 @@ from rest_framework import status
 from django.conf import settings
 from django.db.models import Q
 from core.serializers import UserSerializer, UserCreateSerializer
-from .serializers import DriverSerializer, DriverNameSerializer, DispatcherNameSerializer, LogSerializer, CreateDriverSerializer, CreateUserSerializer, LogDecimalFielsSerializer, UpdateDispatcherSerializer, DriversBoardSerializer
 from core.models import User
-from .models import Driver, Log, LogEdit, Action
-from decimal import Decimal
+from .models import Driver, Vehicle
+from .serializers import DriverSerializer, VehicleSerializer
 # from .tasks import notify_customers
+from core.constants import WEEKDAYS
 import datetime
 
 
-# constants
-
-WEEKDAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
-
-
-#funtions
-def get_week_start():
-    now = datetime.datetime.now()
-    now = now.replace(hour=0, minute=0, second=0)
-    days = WEEKDAYS.index(now.strftime("%A")) + 1  # starting date from Saturday
-    week_start = now - datetime.timedelta(days=days)
-    return week_start
-
-def get_name(id, arr):
-    for a in arr:
-        if id == a['id']:
-            return a['first_name'] + ' ' + a['last_name']
-    return '*name not found'
-
-def generate_action(user, operation, target, name):
-    action = Action(user_id=user, operation=operation, target=target, target_name=name)
-    action.save()
-
-# Create your views here.
 @api_view(['GET', 'PATCH'])
 @permission_classes([IsAuthenticated])
 def test(request):
@@ -49,19 +24,9 @@ def test(request):
     return Response(status=status.HTTP_200_OK)
 
 
-@api_view(['POST'])
-@permission_classes([IsAuthenticated])
-def register(request):
-    serializer = UserCreateSerializer(data=request.data)
-    if serializer.is_valid():
-        serializer.save()
-        return Response({'success': 'created!'}, status=status.HTTP_201_CREATED)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
 @api_view(['GET', 'POST', 'PUT'])
 @permission_classes([IsAuthenticated])
-def drivers(request):
+def drivers2(request):
     if request.method == 'GET':
         #preparing dispatcher names
         dispatcher_names = User.objects.filter(role='DIS').values('id', 'first_name', 'last_name')
@@ -91,6 +56,67 @@ def drivers(request):
             generate_action(request.user.id, 'upd', updated_driver.id, 'dri')
             return Response({'success': 'driver has been succesfully updated'}, status=status.HTTP_200_OK)
         return Response(driver_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET', 'POST', 'PUT'])
+@permission_classes([AllowAny])
+def drivers(request):
+    if request.method == 'GET':
+        if request.GET.get('id'):
+            query = Driver.objects.get(pk = request.GET.get('id'))
+            serializer = DriverSerializer(query)
+        else:
+            query = Driver.objects.all()
+            serializer = DriverSerializer(query, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    if request.method == 'POST':
+        serializer = DriverSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({'success': 'driver has been succesfully created'}, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    if request.method == 'PUT':
+        if request.GET.get('id'):
+            driver = Driver.objects.get(pk=request.GET.get('id'))
+            serializer = DriverSerializer(instance=driver, data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response({'success': 'driver has been succesfully updated'}, status=status.HTTP_200_OK)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'detail': '"id" is required to update vehicle'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET', 'POST', 'PUT'])
+@permission_classes([AllowAny])
+def vehicles(request):
+    print(request.GET)
+    if request.method == 'GET':
+        if request.GET.get('id'):
+            query = Vehicle.objects.get(pk = request.GET.get('id'))
+            serializer = VehicleSerializer(query)
+        else:
+            query = Vehicle.objects.all()
+            serializer = VehicleSerializer(query, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    if request.method == 'POST':
+        serializer = VehicleSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({'success': 'vehicle has been succesfully created'}, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    if request.method == 'PUT':
+        if request.GET.get('id'):
+            vehicle = Vehicle.objects.get(pk=request.GET.get('id'))
+            serializer = VehicleSerializer(instance=vehicle, data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response({'success': 'vehicle has been succesfully updated'}, status=status.HTTP_200_OK)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'detail': '"id" is required to update vehicle'}, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['GET', 'POST', 'PUT'])
@@ -131,47 +157,6 @@ def users(request):
                 return Response({'success': 'user has been succesfully updated'}, status=status.HTTP_200_OK)
             return Response(user_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         return Response({'detail': 'you have no access to update to this role'}, status=status.HTTP_403_FORBIDDEN)
-
-
-@api_view(['GET', 'POST', 'PUT'])
-@permission_classes([IsAuthenticated])
-def gross(request):
-    if request.method == 'GET':
-        #preparing driver names
-        driver_names = Driver.objects.all().values('id', 'first_name', 'last_name')
-        driver_names_serializer = DriverNameSerializer(driver_names, many=True)
-
-        #preparing dispatcher names
-        dispatcher_names = User.objects.filter(role='DIS').values('id', 'first_name', 'last_name')
-        dispatcher_names_serializer = DispatcherNameSerializer(dispatcher_names, many=True)
-
-        queryset = Log.objects.all().order_by('-time')
-        log_serializer = LogSerializer(queryset, many=True)
-
-        return Response({"logs": log_serializer.data, "drivers": driver_names_serializer.data, "dispatchers": dispatcher_names_serializer.data}, status=status.HTTP_200_OK)
-
-    if request.method == "POST":
-        data = request.data
-        data['user'] = request.user.id
-        log_serializer = LogSerializer(data=data)
-        if log_serializer.is_valid():
-            new_log = log_serializer.save()
-            generate_action(request.user.id, 'cre', new_log.id, 'gro')
-            return Response({'success': 'gross has been succesfully added'}, status=status.HTTP_200_OK)
-        return Response(log_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    if request.method == 'PUT':
-        data = request.data
-        log = Log.objects.get(pk=data["id"])
-        old_change = log.change
-        log_serializer = LogSerializer(instance=log, data=data)
-        if log_serializer.is_valid():
-            updated_log = log_serializer.save()
-            generate_action(request.user.id, 'upd', updated_log.id, 'gro')
-            return Response({'success': 'the gross has been succesfully updated'}, status=status.HTTP_200_OK)
-        return Response(log_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
 
 
 @api_view(['GET'])
@@ -269,3 +254,41 @@ def drivers_board(request, week_before):
     
     return Response(drivers, status=status.HTTP_200_OK)
 
+
+@api_view(['GET', 'POST', 'PUT'])
+@permission_classes([IsAuthenticated])
+def gross(request):
+    if request.method == 'GET':
+        #preparing driver names
+        driver_names = Driver.objects.all().values('id', 'first_name', 'last_name')
+        driver_names_serializer = DriverNameSerializer(driver_names, many=True)
+
+        #preparing dispatcher names
+        dispatcher_names = User.objects.filter(role='DIS').values('id', 'first_name', 'last_name')
+        dispatcher_names_serializer = DispatcherNameSerializer(dispatcher_names, many=True)
+
+        queryset = Log.objects.all().order_by('-time')
+        log_serializer = LogSerializer(queryset, many=True)
+
+        return Response({"logs": log_serializer.data, "drivers": driver_names_serializer.data, "dispatchers": dispatcher_names_serializer.data}, status=status.HTTP_200_OK)
+
+    if request.method == "POST":
+        data = request.data
+        data['user'] = request.user.id
+        log_serializer = LogSerializer(data=data)
+        if log_serializer.is_valid():
+            new_log = log_serializer.save()
+            generate_action(request.user.id, 'cre', new_log.id, 'gro')
+            return Response({'success': 'gross has been succesfully added'}, status=status.HTTP_200_OK)
+        return Response(log_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    if request.method == 'PUT':
+        data = request.data
+        log = Log.objects.get(pk=data["id"])
+        old_change = log.change
+        log_serializer = LogSerializer(instance=log, data=data)
+        if log_serializer.is_valid():
+            updated_log = log_serializer.save()
+            generate_action(request.user.id, 'upd', updated_log.id, 'gro')
+            return Response({'success': 'the gross has been succesfully updated'}, status=status.HTTP_200_OK)
+        return Response(log_serializer.errors, status=status.HTTP_400_BAD_REQUEST)

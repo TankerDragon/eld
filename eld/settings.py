@@ -99,7 +99,7 @@ DATABASES = {
         # 'NAME': BASE_DIR / 'db.sqlite3',
         'ENGINE': 'django.db.backends.mysql',
         'HOST': 'localhost',
-        'NAME': 'accounting',
+        'NAME': 'eld',
         'USER': 'root',
         'PASSWORD': '@dragon$',
         # 'PASSWORD': UBUNTU_MYSQL_PASSWORD,
