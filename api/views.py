@@ -71,22 +71,45 @@ def drivers(request):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     if request.method == 'POST':
-        serializer = DriverSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
+        driver_serializer = DriverSerializer(data=request.data)
+        user_serializer = UserCreateSerializer(data=request.data)
+        # data validation
+        valid_user = user_serializer.is_valid()
+        valid_driver = driver_serializer.is_valid()
+        if valid_user and valid_driver:
+            saved_user = user_serializer.save()
+            saved_driver = driver_serializer.save()
+            # clone two models 
+            saved_driver.user = saved_user
+            saved_driver.save()
             return Response({'success': 'driver has been succesfully created'}, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response(user_serializer.errors | driver_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     if request.method == 'PUT':
         if request.GET.get('id'):
             driver = Driver.objects.get(pk=request.GET.get('id'))
-            serializer = DriverSerializer(instance=driver, data=request.data)
-            if serializer.is_valid():
-                serializer.save()
+            user = User.objects.get(pk = driver.user_id)
+            driver_serializer = DriverSerializer(instance=driver, data=request.data)
+            user_serializer = UserSerializer(instance=user, data=request.data)
+            # data validation
+            valid_user = user_serializer.is_valid()
+            valid_driver = driver_serializer.is_valid()
+            if valid_user and valid_driver:
+                user_serializer.save()
+                driver_serializer.save()
                 return Response({'success': 'driver has been succesfully updated'}, status=status.HTTP_200_OK)
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        return Response({'detail': '"id" is required to update vehicle'}, status=status.HTTP_400_BAD_REQUEST)
-
+            return Response(user_serializer.errors | driver_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'detail': '"id" is required to update driver'}, status=status.HTTP_400_BAD_REQUEST)
+"""
+{
+    "username": "driver",
+    "role": "ADM",
+    "password": "8090",
+    "first_name": "FNAME",
+    "last_name": "LNAME",
+    "cdl_number": "cdl001"
+}
+"""
 
 @api_view(['GET', 'POST', 'PUT'])
 @permission_classes([AllowAny])

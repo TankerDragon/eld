@@ -5,17 +5,11 @@ from core.models import User
 from .models import Driver, Vehicle
 
 
-class UserSerializer(ModelSerializer):
-    class Meta:
-        model = User
-        fields = ['username', 'first_name', 'last_name']
-
-
 class DriverSerializer(ModelSerializer):
-    user = UserSerializer(many=True)
     class Meta:
         model = Driver
         fields = '__all__'
+        read_only_fields = ['user', 'is_active', 'app_version']
 
 
 class VehicleSerializer(ModelSerializer):

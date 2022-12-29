@@ -10,7 +10,6 @@ class Company(models.Model):
 
 class Driver(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, null=True, on_delete=models.CASCADE)
-    company = models.OneToOneField(Company, null=True ,on_delete=models.SET_NULL)
     cdl_number = models.CharField(max_length=20, unique=True)
     cdl_state = models.CharField(max_length=2, choices=STATES, default='AK')
     # vehicle = models.OneToOneField(Vehicle, blank=True, null=True, on_delete=models.SET_NULL)
