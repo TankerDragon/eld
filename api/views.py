@@ -25,40 +25,6 @@ def test(request):
 
 
 @api_view(['GET', 'POST', 'PUT'])
-@permission_classes([IsAuthenticated])
-def drivers2(request):
-    if request.method == 'GET':
-        #preparing dispatcher names
-        dispatcher_names = User.objects.filter(role='DIS').values('id', 'first_name', 'last_name')
-        dispatcher_names_serializer = DispatcherNameSerializer(dispatcher_names, many=True)
-
-        drivers_query = Driver.objects.all().order_by('first_name')
-        drivers_serializer = DriverSerializer(drivers_query, many=True)
-        return Response({"drivers": drivers_serializer.data, "dispatchers": dispatcher_names_serializer.data}, status=status.HTTP_200_OK)
-
-    if request.method == 'POST':
-        # check if requested user has access
-        role = request.user.role
-        if role == "OWN" or role == "ADM": 
-            driver_serializer = CreateDriverSerializer(data=request.data)
-            if driver_serializer.is_valid():
-                new_driver = driver_serializer.save()
-                generate_action(request.user.id, 'cre', new_driver.id, 'dri')
-                return Response({'success': 'driver has been succesfully created'}, status=status.HTTP_201_CREATED)
-            return Response(driver_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        return Response({'detail': 'you have no access to create a driver'}, status=status.HTTP_403_FORBIDDEN)
-
-    if request.method == 'PUT':
-        driver = Driver.objects.get(pk=request.data["id"])
-        driver_serializer = CreateDriverSerializer(instance=driver, data=request.data)
-        if driver_serializer.is_valid():
-            updated_driver = driver_serializer.save()
-            generate_action(request.user.id, 'upd', updated_driver.id, 'dri')
-            return Response({'success': 'driver has been succesfully updated'}, status=status.HTTP_200_OK)
-        return Response(driver_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-@api_view(['GET', 'POST', 'PUT'])
 @permission_classes([AllowAny])
 def drivers(request):
     if request.method == 'GET':
