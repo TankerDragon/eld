@@ -1,3 +1,11 @@
+USER_ROLES = [
+    ('OWN', 'Owner'),
+    ('ADM', 'Admin'),
+    ('DIS', 'Dispatcher'),
+    ('UPD', 'Updater'),
+    ('DRI', 'Driver'),
+]
+
 DRIVER_TYPE = [
     ('O88', 'Owner operator - 88%'),
     ('O85', 'Owner operator - 85%'),

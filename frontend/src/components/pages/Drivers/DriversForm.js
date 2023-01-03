@@ -1,39 +1,45 @@
 import { useState, useEffect } from "react";
-import { DRIVER_TYPE } from "../../../constants/constants";
-import axios from "../../../api/axios";
-import useAuth from "../../../hooks/useAuth";
-import useMessage from "../../../hooks/useMessage";
+import { STATES } from "../../../constants/constants";
+import useRequest from "../../../hooks/useRequest";
 import Input from "../../common/Input";
 import Select from "../../common/Select";
+import Checkbox from "../../common/Checkbox";
 
 const DRIVERS_URL = "/api/drivers/";
 
-const DriversForm = ({ closeForm, dispatchers, method, edit }) => {
-  const { auth } = useAuth();
-  const { createMessage } = useMessage();
+const DriversForm = ({ closeForm, method, edit }) => {
 
-  const [errors, setErrors] = useState({});
+  const { errors, postPutData } = useRequest(DRIVERS_URL);
+
+  // const [errors, setErrors] = useState({});
 
   const [errMsg, setErrMsg] = useState("");
 
   const [log, setLog] = useState(
     method === "PUT"
-      ? edit
+      ? {
+          ...edit,
+          ...edit.user
+      }
       : {
           first_name: "",
           last_name: "",
-          dispatcher: "",
-          driver_type: "L",
-          gross_target: 10000,
+          email: "",
+          phone: "",
+          is_active: true,
+          username: "",
+          password: "",
+          cdl_number: "",
+          cdl_state: "AK",
         }
   );
 
   // preparing dispatchers selections for the form
-  const DISPATCHERS = [];
-  DISPATCHERS.push(["", "--------"]);
-  for (let dispatcher of dispatchers) {
-    DISPATCHERS.push([dispatcher.id, dispatcher.first_name + " " + dispatcher.last_name]);
-  }
+  // const DISPATCHERS = [];
+  // DISPATCHERS.push(["", "--------"]);
+  // for (let dispatcher of dispatchers) {
+  //   DISPATCHERS.push([dispatcher.id, dispatcher.first_name + " " + dispatcher.last_name]);
+  // }
 
   const handleChange = ({ currentTarget: input }) => {
     const newLog = { ...log };
@@ -45,7 +51,7 @@ const DriversForm = ({ closeForm, dispatchers, method, edit }) => {
     setLog(newLog);
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     // validate
     // const errors = validate();
@@ -53,51 +59,12 @@ const DriversForm = ({ closeForm, dispatchers, method, edit }) => {
     // console.log(errors);
     // if (errors) return;
     console.log("submitted", method);
+    console.log(log);
     setErrMsg("");
-    setErrors({});
 
     // post or put to server
-    try {
-      let response;
-      if (method === "POST") {
-        response = await axios.post(DRIVERS_URL, JSON.stringify(log), {
-          headers: { "Content-Type": "application/json", Authorization: "JWT " + auth.accessToken },
-          // withCredentials: true,
-        });
-      } else if (method === "PUT") {
-        response = await axios.put(DRIVERS_URL, JSON.stringify(log), {
-          headers: { "Content-Type": "application/json", Authorization: "JWT " + auth.accessToken },
-          // withCredentials: true,
-        });
-      }
-
-      console.log(response);
-      if (response.status === 201 || response.status === 200) {
-        if (response.data) {
-          createMessage({ type: "success", content: response.data.success });
-        }
-        closeForm({ reload: true });
-      }
-    } catch (err) {
-      console.log(err);
-      if (!err?.response) {
-        setErrMsg("No Server Response");
-      } else if (err.response?.status === 400) {
-        if (err.response.data) {
-          const newErrors = {};
-          Object.keys(err.response.data).forEach((s) => {
-            newErrors[s] = err.response.data[s];
-          });
-          setErrors(newErrors);
-        } else {
-          setErrMsg(err.message);
-        }
-      } else if (err.response.status === 401 || err.response.status === 403) {
-        setErrMsg(err.response.data.detail);
-      } else {
-        setErrMsg(err.message);
-      }
-    }
+    postPutData(method, log, closeForm);
+      // closeForm({ reload: true });
   };
 
   return (
@@ -111,11 +78,18 @@ const DriversForm = ({ closeForm, dispatchers, method, edit }) => {
           <Input name="last_name" type="text" value={log.last_name} label="Last name" onChange={handleChange} error={errors.last_name} />
         </div>
         <div className="row">
-          <Select name="dispatcher" selections={DISPATCHERS} isObject={false} value={log.dispatcher} label="Dispatcher" onChange={handleChange} error={errors.dispatcher} />
-          <Select name="driver_type" selections={DRIVER_TYPE} isObject={true} value={log.driver_type} label="Driver type" onChange={handleChange} error={errors.driver_type} />
+          <Input name="email" type="text" value={log.email} label="Email" onChange={handleChange} error={errors.email} />
+          <Input name="phone" type="text" value={log.phone} label="Phone" onChange={handleChange} error={errors.phone} />
+          <Checkbox name="is_active" label="Active" checked={log.is_active} onChange={handleChange} error={errors.is_active}/>
         </div>
         <div className="row">
-          <Input name="gross_target" type="number" value={log.gross_target} label="Gross Target" onChange={handleChange} error={errors.gross_target} />
+          <Input name="username" type="text" value={log.username} label="Username" onChange={handleChange} error={errors.username} />
+          <Input name="password" type="text" value={log.password} label="Password" onChange={handleChange} error={errors.password} />
+          <Input name="confirm_password" type="text" value={log.confirm_password} label="Confirm Password" onChange={handleChange} error={errors.confirm_password} />
+        </div>
+        <div className="row">
+          <Input name="cdl_number" type="text" value={log.cdl_number} label="Driver License Number" onChange={handleChange} error={errors.cdl_number} />
+          <Select name="cdl_state" selections={STATES} isObject={true} value={log.cdl_state} label="License State" onChange={handleChange} error={errors.cdl_state} />
         </div>
 
         <p className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">
@@ -130,6 +104,6 @@ const DriversForm = ({ closeForm, dispatchers, method, edit }) => {
       </form>
     </div>
   );
-};
+};  
 
 export default DriversForm;

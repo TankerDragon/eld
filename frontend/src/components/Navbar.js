@@ -45,9 +45,9 @@ function Navbar() {
           </NavLink>
         </li>
         <li>
-          <NavLink className="link" to={"/users"}>
+          <NavLink className="link" to={"/vehicles"}>
             <FiUsers />
-            Users
+            Vehicles
           </NavLink>
         </li>
       </ul>

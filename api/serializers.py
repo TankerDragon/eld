@@ -1,4 +1,5 @@
 from rest_framework.serializers import ModelSerializer, Serializer
+from core.serializers import UserSerializer, UserCreateSerializer
 from rest_framework import serializers
 from django.contrib.auth.hashers import make_password
 from core.models import User
@@ -6,10 +7,18 @@ from .models import Driver, Vehicle
 
 
 class DriverSerializer(ModelSerializer):
+    user = UserSerializer(read_only=True)
+
     class Meta:
         model = Driver
         fields = '__all__'
-        read_only_fields = ['user', 'is_active', 'app_version']
+        read_only_fields = ['app_version']
+
+    # def create(self, validated_data):
+    #     print("******************")
+    #     print(validated_data)
+
+    #     return person
 
 
 class VehicleSerializer(ModelSerializer):

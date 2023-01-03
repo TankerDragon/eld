@@ -9,16 +9,22 @@ import DriversForm from "./DriversForm";
 const DRIVERS_URL = "/api/drivers/";
 
 const Drivers = () => {
-  const { drivers, dispatchers, getDrivers } = useRequest(DRIVERS_URL);
+  const { data, getData } = useRequest(DRIVERS_URL);
+
+  useEffect(() => {
+    getData();
+  }, []);
 
   const [formOpen, setFormOpen] = useState(false);
   const [edit, setEdit] = useState({});
   const [method, setMethod] = useState("POST");
 
+  
+
   const closeForm = ({ reload }) => {
     setFormOpen(false);
     if (reload) {
-      getDrivers();
+      getData();
     }
   };
 
@@ -42,8 +48,8 @@ const Drivers = () => {
           New Driver
         </button>
       </div>
-      <DriversTable drivers={drivers} dispatchers={dispatchers} handleEdit={handleEdit} />
-      {formOpen && <DriversForm closeForm={closeForm} dispatchers={dispatchers} method={method} edit={edit} />}
+      <DriversTable drivers={data} handleEdit={handleEdit} />
+      {formOpen && <DriversForm closeForm={closeForm} method={method} edit={edit} />}
     </div>
   );
 };

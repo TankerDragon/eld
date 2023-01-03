@@ -18,16 +18,7 @@ const getChoice = (choice, choices) => {
   return found;
 };
 
-const DRIVER_TYPE = {
-  O88: "Owner operator - 88%",
-  O85: "Owner operator - 85%",
-  C30: "Company driver - 30%",
-  C35: "Company driver - 35%",
-  L: "Lease operator",
-  R: "Rental operator",
-};
-
-const DriversTable = ({ drivers, dispatchers, handleEdit }) => {
+const DriversTable = ({ drivers, handleEdit }) => {
   return (
     <table className="table">
       <thead>
@@ -35,9 +26,12 @@ const DriversTable = ({ drivers, dispatchers, handleEdit }) => {
           <th>№</th>
           <th>First name</th>
           <th>Last name</th>
-          <th>Dispatcher</th>
-          <th>Driver type</th>
-          <th>Gross target</th>
+          <th>Username</th>
+          <th>Email</th>
+          <th>Phone</th>
+          <th>Truck</th>
+          <th>Status</th>
+          <th>App version</th>
           <th>Actions</th>
         </tr>
       </thead>
@@ -46,11 +40,14 @@ const DriversTable = ({ drivers, dispatchers, handleEdit }) => {
           return (
             <tr key={driver.id}>
               <td>{index + 1}</td>
-              <td>{driver.first_name}</td>
-              <td>{driver.last_name}</td>
-              <td>{getName(driver.dispatcher, dispatchers)}</td>
-              <td>{getChoice(driver.driver_type, DRIVER_TYPE)}</td>
-              <td>{driver.gross_target}</td>
+              <td>{driver.user.first_name}</td>
+              <td>{driver.user.last_name}</td>
+              <td>{driver.user.username}</td>
+              <td>{driver.user.email}</td>
+              <td>{driver.phone}</td>
+              <td>***</td>
+              <td>{driver.is_active ? 'active': 'inactive'}</td>
+              <td>{driver.app_version}</td>
               <td>
                 <div className="actions">
                   <div
@@ -70,5 +67,7 @@ const DriversTable = ({ drivers, dispatchers, handleEdit }) => {
     </table>
   );
 };
+
+
 
 export default DriversTable;

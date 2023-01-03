@@ -29,14 +29,17 @@ def test(request):
 def drivers(request):
     if request.method == 'GET':
         if request.GET.get('id'):
-            query = Driver.objects.get(pk = request.GET.get('id'))
+            query = Driver.objects.select_related('user').get(pk = request.GET.get('id'))
             serializer = DriverSerializer(query)
         else:
-            query = Driver.objects.all()
+            query = Driver.objects.select_related('user').all()
             serializer = DriverSerializer(query, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     if request.method == 'POST':
+        # set user role to Driver
+        request.data['role'] = "DRI"
+        # serialization
         driver_serializer = DriverSerializer(data=request.data)
         user_serializer = UserCreateSerializer(data=request.data)
         # data validation
@@ -52,6 +55,8 @@ def drivers(request):
         return Response(user_serializer.errors | driver_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     if request.method == 'PUT':
+        # set user role to Driver
+        request.data['role'] = "DRI"
         if request.GET.get('id'):
             driver = Driver.objects.get(pk=request.GET.get('id'))
             user = User.objects.get(pk = driver.user_id)
@@ -74,6 +79,20 @@ def drivers(request):
     "first_name": "FNAME",
     "last_name": "LNAME",
     "cdl_number": "cdl001"
+}
+
+{
+    "cdl_number": "cdl001",
+    "username": "driver2",
+    "role": "ADM",
+    "password": "!2344321",
+    "first_name": "FNAME",
+    "last_name": "LNAME",
+    "user": {
+        "role": "ADM",
+        "first_name": "FNAME",
+        "last_name": "LNAME"
+    }
 }
 """
 
