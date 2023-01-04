@@ -18,8 +18,8 @@ const DriversForm = ({ closeForm, method, edit }) => {
   const [log, setLog] = useState(
     method === "PUT"
       ? {
-          ...edit,
-          ...edit.user
+        ...edit.user,
+        ...edit,
       }
       : {
           first_name: "",

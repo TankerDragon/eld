@@ -6,6 +6,11 @@ USER_ROLES = [
     ('DRI', 'Driver'),
 ]
 
+COUNTRIES = [
+    ('US', 'United States'),
+    ('CA', 'Canada'),
+]
+
 DRIVER_TYPE = [
     ('O88', 'Owner operator - 88%'),
     ('O85', 'Owner operator - 85%'),
@@ -30,7 +35,7 @@ LOAD_STATUS = [
 ]
 
 STATES = [
-    ("AK", "Alaska"), 
+    ("AK", "Alaska"),
     ("AL", "Alabama"), 
     ("AR", "Arkansas"), 
     ("AS", "American Samoa"), 
@@ -162,3 +167,10 @@ FUEL_TYPE = (
 )
 
 WEEKDAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+
+TIME_ZONES = [
+    ('US/Cent', 'US/Central'),
+    ('US/East', 'US/Eastern'),
+    ('US/Moun', 'US/Mountain'),
+    ('US/Paci', 'US/Pacific'),
+]

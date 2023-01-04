@@ -1,35 +1,25 @@
 from django.db import models
 from django.conf import settings
 from core.models import User
-from core.constants import STATES, YEARS, DEFAULT_YEAR, FUEL_TYPE
+from core.constants import STATES, YEARS, DEFAULT_YEAR, FUEL_TYPE, COUNTRIES, TIME_ZONES
 
 # settings.AUTH_USER_MODEL
 class Company(models.Model):
-    pass
-
-
-class Driver(models.Model):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, null=True, on_delete=models.CASCADE)
-    cdl_number = models.CharField(max_length=20, unique=True)
-    cdl_state = models.CharField(max_length=2, choices=STATES, default='AK')
-    # vehicle = models.OneToOneField(Vehicle, blank=True, null=True, on_delete=models.SET_NULL)
-    co_driver = models.OneToOneField('self', null=True, on_delete=models.SET_NULL)
-    company_user_id = models.CharField(max_length=15, null=True)
-    phone = models.CharField(max_length = 10, null=True, blank=True)
-    address = models.CharField(max_length=127, null=True, blank=True)
-    app_version = models.CharField(max_length=5, null=True)
-    notes = models.CharField(max_length=255, null=True, blank=True)
-    is_active = models.BooleanField(default=1)
-
-    def __str__(self):
-        return self.first_name + ' ' + self.last_name
+    name = models.CharField(max_length=63)
+    address = models.CharField(max_length=255)
+    country = models.CharField(max_length=2, choices=COUNTRIES, default='US')
+    region = models.CharField(max_length=2, choices=STATES, default='AK')
+    city = models.CharField(max_length=127)
+    zip_code = models.CharField(max_length=15)
+    time_zone = models.CharField(max_length=7, choices=TIME_ZONES, default='US/East')
 
 # class Group(models.Model):
 #     staff = models.ForeignKey(User, on_delete=models.CASCADE)
 #     driver = models.ForeignKey(Driver, on_delete=models.CASCADE)
 
 class Vehicle(models.Model):
-    driver = models.ForeignKey(Driver, null=True, on_delete=models.SET_NULL)
+    # driver = models.ForeignKey(Driver, null=True, on_delete=models.SET_NULL)
+    company = models.ForeignKey(Company, on_delete=models.CASCADE)
     unit_number = models.CharField(max_length=10, unique=True)
     make = models.CharField(max_length=15, null=True, blank=True)
     model = models.CharField(max_length=20, null=True, blank=True)
@@ -44,6 +34,25 @@ class Vehicle(models.Model):
 
     def __str__(self):
         return self.unit_number
+
+
+class Driver(models.Model):
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, null=True, on_delete=models.CASCADE)
+    company = models.ForeignKey(Company, on_delete=models.CASCADE)
+    vehicle = models.ForeignKey(Vehicle, blank=True, null=True, on_delete=models.SET_NULL)
+    cdl_number = models.CharField(max_length=20, unique=True)
+    cdl_state = models.CharField(max_length=2, choices=STATES, default='AK')
+    co_driver = models.OneToOneField('self', null=True, on_delete=models.SET_NULL)
+    company_user_id = models.CharField(max_length=15, null=True)
+    phone = models.CharField(max_length = 10, null=True, blank=True)
+    address = models.CharField(max_length=127, null=True, blank=True)
+    app_version = models.CharField(max_length=5, null=True)
+    notes = models.CharField(max_length=255, null=True, blank=True)
+    is_active = models.BooleanField(default=1)
+
+    def __str__(self):
+        return self.first_name + ' ' + self.last_name
+
 
 # class Log(models.Model):
 #     driver = models.ForeignKey(Driver, on_delete=models.CASCADE)

@@ -37,8 +37,9 @@ def drivers(request):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     if request.method == 'POST':
-        # set user role to Driver
+        # set user role and company
         request.data['role'] = "DRI"
+        request.data['company'] = request.user.company_id
         # serialization
         driver_serializer = DriverSerializer(data=request.data)
         user_serializer = UserCreateSerializer(data=request.data)
@@ -57,8 +58,9 @@ def drivers(request):
     if request.method == 'PUT':
         # set user role to Driver
         request.data['role'] = "DRI"
-        if request.GET.get('id'):
-            driver = Driver.objects.get(pk=request.GET.get('id'))
+        print(request.data.get('id'))
+        if request.data.get('id'):
+            driver = Driver.objects.get(pk=request.data.get('id'))
             user = User.objects.get(pk = driver.user_id)
             driver_serializer = DriverSerializer(instance=driver, data=request.data)
             user_serializer = UserSerializer(instance=user, data=request.data)
