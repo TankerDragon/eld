@@ -58,7 +58,6 @@ def drivers(request):
     if request.method == 'PUT':
         # set user role to Driver
         request.data['role'] = "DRI"
-        print(request.data.get('id'))
         if request.data.get('id'):
             driver = Driver.objects.get(pk=request.data.get('id'))
             user = User.objects.get(pk = driver.user_id)
@@ -77,7 +76,7 @@ def drivers(request):
 {
     "username": "driver",
     "role": "ADM",
-    "password": "8090",
+    "password": "!2344321",
     "first_name": "FNAME",
     "last_name": "LNAME",
     "cdl_number": "cdl001"

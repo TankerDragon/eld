@@ -13,9 +13,10 @@ class Company(models.Model):
     zip_code = models.CharField(max_length=15)
     time_zone = models.CharField(max_length=7, choices=TIME_ZONES, default='US/East')
 
-# class Group(models.Model):
-#     staff = models.ForeignKey(User, on_delete=models.CASCADE)
-#     driver = models.ForeignKey(Driver, on_delete=models.CASCADE)
+class Elduser(models.Model):
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, null=True, on_delete=models.CASCADE)
+    company = models.ForeignKey(Company, on_delete=models.CASCADE)
+    create_new_user = models.BooleanField(default=False)
 
 class Vehicle(models.Model):
     # driver = models.ForeignKey(Driver, null=True, on_delete=models.SET_NULL)
