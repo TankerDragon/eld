@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import useAuth from "./useAuth";
 import useMessage from "./useMessage";
 import axios from "../api/axios";
@@ -6,9 +7,9 @@ import axios from "../api/axios";
 const useRequest = (url) => {
   const { auth } = useAuth();
   const { createMessage } = useMessage();
+  const navigate = useNavigate();
 
   const [data, setData] = useState([]);
-  const [success, setSuccess] = useState(false);
   const [errors, setErrors] = useState({});
 
   // useEffect(() => {
@@ -64,7 +65,9 @@ const useRequest = (url) => {
           });
           setErrors(newErrors);
         }
-      } else if (err.response.status === 401 || err.response.status === 403) {
+      } else if(err.response.status === 401) {
+        navigate("/login");
+      } else if (err.response.status === 403) {
         createMessage({ type: "danger", content: err.response.data.detail });
       } else {
         createMessage({ type: "danger", content: err.message });

@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import useRequest from "../../../hooks/useRequest";
-import DriversTable from "./DriversTable";
-import DriversForm from "./DriversForm";
+import VehiclesTable from "./VehiclesTable";
+import VehiclesForm from "./VehiclesForm";
 
-const DRIVERS_URL = "/api/drivers/";
+const VEHICLES_URL = "/api/vehicles/";
 
-const Drivers = () => {
-  const { data, getData } = useRequest(DRIVERS_URL);
+const Vehicles = () => {
+  const { data, getData } = useRequest(VEHICLES_URL);
 
   useEffect(() => {
     getData();
@@ -34,7 +34,7 @@ const Drivers = () => {
   return (
     <div className="page-container">
       <div className="row">
-        <h1>Drivers</h1>
+        <h1>Vehicles</h1>
         <button
           className="button"
           onClick={() => {
@@ -42,13 +42,13 @@ const Drivers = () => {
             setFormOpen(!formOpen);
           }}
         >
-          New Driver
+          New Vehicle
         </button>
       </div>
-      <DriversTable drivers={data} handleEdit={handleEdit} />
-      {formOpen && <DriversForm closeForm={closeForm} method={method} edit={edit} />}
+      <VehiclesTable vehicles={data} handleEdit={handleEdit} />
+      {formOpen && <VehiclesForm closeForm={closeForm} method={method} edit={edit} />}
     </div>
   );
 };
 
-export default Drivers;
+export default Vehicles;

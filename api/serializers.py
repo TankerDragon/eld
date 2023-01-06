@@ -12,7 +12,7 @@ class DriverSerializer(ModelSerializer):
     class Meta:
         model = Driver
         fields = '__all__'
-        read_only_fields = ['app_version']
+        read_only_fields = ['app_version', 'company_id']
 
     # def create(self, validated_data):
     #     print("******************")
@@ -22,10 +22,11 @@ class DriverSerializer(ModelSerializer):
 
 
 class VehicleSerializer(ModelSerializer):
-    driver_id = serializers.IntegerField(required=False)
+    
     class Meta:
         model = Vehicle
-        fields = ['id', 'driver_id', 'year', 'unit_number', 'fuel_type', 'make', 'model', 'license_number', 'license_state', 'notes']
+        fields = '__all__'
+        read_only_fields = ['company_id']
 
 
 # ####################################

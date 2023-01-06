@@ -10,7 +10,7 @@ from django.conf import settings
 from django.db.models import Q
 from core.serializers import UserSerializer, UserCreateSerializer
 from core.models import User
-from .models import Driver, Vehicle
+from .models import Driver, Vehicle, Elduser
 from .serializers import DriverSerializer, VehicleSerializer
 # from .tasks import notify_customers
 from core.constants import WEEKDAYS
@@ -37,9 +37,11 @@ def drivers(request):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     if request.method == 'POST':
-        # set user role and company
+        # get elduser's fields
+        elduser = Elduser.objects.values('company_id').get(user_id=request.user.id)
+        # set user role and company id
         request.data['role'] = "DRI"
-        request.data['company'] = request.user.company_id
+        request.data['company'] = elduser.get("company_id")
         # serialization
         driver_serializer = DriverSerializer(data=request.data)
         user_serializer = UserCreateSerializer(data=request.data)
@@ -75,7 +77,7 @@ def drivers(request):
 """
 {
     "username": "driver",
-    "role": "ADM",
+    "email": "mail@mail.com",
     "password": "!2344321",
     "first_name": "FNAME",
     "last_name": "LNAME",
@@ -100,7 +102,6 @@ def drivers(request):
 @api_view(['GET', 'POST', 'PUT'])
 @permission_classes([AllowAny])
 def vehicles(request):
-    print(request.GET)
     if request.method == 'GET':
         if request.GET.get('id'):
             query = Vehicle.objects.get(pk = request.GET.get('id'))
@@ -111,6 +112,10 @@ def vehicles(request):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     if request.method == 'POST':
+        # get elduser's fields
+        elduser = Elduser.objects.values('company_id').get(user_id=request.user.id)
+        # set company id
+        request.data['company'] = elduser.get('company_id')
         serializer = VehicleSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()

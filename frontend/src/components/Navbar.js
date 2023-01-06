@@ -1,10 +1,10 @@
 import logo from "../images/logo.png";
 import { NavLink } from "react-router-dom";
 // importing icons
-import { FiLogOut, FiUsers } from "react-icons/fi";
+import { FiLogOut, FiUsers, FiTruck } from "react-icons/fi";
 import { RiExchangeDollarLine, RiLineChartLine, RiAdminLine } from "react-icons/ri";
 import { HiOutlineKey } from "react-icons/hi";
-import { BsArchive, BsCalculator } from "react-icons/bs";
+import { BsArchive } from "react-icons/bs";
 
 function Navbar() {
   return (
@@ -46,7 +46,7 @@ function Navbar() {
         </li>
         <li>
           <NavLink className="link" to={"/vehicles"}>
-            <FiUsers />
+            <FiTruck />
             Vehicles
           </NavLink>
         </li>
