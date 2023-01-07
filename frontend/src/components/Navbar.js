@@ -21,24 +21,6 @@ function Navbar() {
           </NavLink>
         </li>
         <li>
-          <NavLink className="link" to={"/logs"}>
-            <BsArchive />
-            Logs
-          </NavLink>
-        </li>
-        <li>
-          <NavLink className="link" to={"/driver-gross"}>
-            <RiLineChartLine />
-            Drivers' gross
-          </NavLink>
-        </li>
-        <li>
-          <NavLink className="link" to={"/dispatcher-gross"}>
-            <RiLineChartLine />
-            Dispatchers' gross
-          </NavLink>
-        </li>
-        <li>
           <NavLink className="link" to={"/drivers"}>
             <FiUsers />
             Drivers
@@ -48,6 +30,12 @@ function Navbar() {
           <NavLink className="link" to={"/vehicles"}>
             <FiTruck />
             Vehicles
+          </NavLink>
+        </li>
+        <li>
+          <NavLink className="link" to={"/users"}>
+            <FiUsers />
+            Users
           </NavLink>
         </li>
       </ul>

@@ -16,7 +16,15 @@ class Company(models.Model):
 class Elduser(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, null=True, on_delete=models.CASCADE)
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
-    create_new_user = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=1)
+
+    create_user = models.BooleanField(default=False)
+    update_user = models.BooleanField(default=False)
+    activate_user = models.BooleanField(default=False)
+
+    create_driver = models.BooleanField(default=False)
+    update_driver = models.BooleanField(default=False)
+    activate_driver = models.BooleanField(default=False)
 
 class Vehicle(models.Model):
     # driver = models.ForeignKey(Driver, null=True, on_delete=models.SET_NULL)
@@ -44,7 +52,7 @@ class Driver(models.Model):
     cdl_number = models.CharField(max_length=20, unique=True)
     cdl_state = models.CharField(max_length=2, choices=STATES, default='AK')
     co_driver = models.OneToOneField('self', null=True, on_delete=models.SET_NULL)
-    phone = models.CharField(max_length = 10, null=True, blank=True)
+    phone = models.CharField(max_length = 13, null=True, blank=True)
     address = models.CharField(max_length=127, null=True, blank=True)
     app_version = models.CharField(max_length=5, null=True)
     notes = models.CharField(max_length=255, null=True, blank=True)

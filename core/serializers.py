@@ -15,6 +15,7 @@ class UserCreateSerializer(BaseUserCreateSerializer):
 class UserSerializer(BaseUserSerializer):
     class Meta(BaseUserSerializer.Meta):
         fields = ['id', 'username', 'role', 'email', 'first_name', 'last_name']
+        read_only_fields = ['role']
 
     
 

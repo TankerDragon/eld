@@ -11,7 +11,7 @@ from django.db.models import Q
 from core.serializers import UserSerializer, UserCreateSerializer
 from core.models import User
 from .models import Driver, Vehicle, Elduser
-from .serializers import DriverSerializer, VehicleSerializer
+from .serializers import DriverSerializer, VehicleSerializer, ELDUserSerializer
 # from .tasks import notify_customers
 from core.constants import WEEKDAYS
 import datetime
@@ -137,12 +137,12 @@ def vehicles(request):
 @permission_classes([AllowAny])
 def users(request):
     if request.method == 'GET':
-        if request.GET.get('id', None):
-            user = User.objects.get(pk=request.GET.get('id', None))
-            user_serializer = UserSerializer(user)
+        if request.GET.get('id'):
+            user = Elduser.objects.select_related('user').get(pk=request.GET.get('id'))
+            user_serializer = ELDUserSerializer(user)
         else:
-            users = User.objects.all()
-            user_serializer = UserSerializer(users, many=True)            
+            users = Elduser.objects.select_related('user').all()
+            user_serializer = ELDUserSerializer(users, many=True)
         return Response(user_serializer.data, status=status.HTTP_200_OK)
 
     if request.method == 'POST':
@@ -153,7 +153,6 @@ def users(request):
             user_serializer = CreateUserSerializer(data=request.data)
             if user_serializer.is_valid():
                 new_user = user_serializer.save()
-                generate_action(request.user.id, 'cre', new_user.id, 'use')
                 return Response({'success': 'user has been succesfully created'}, status=status.HTTP_201_CREATED)
             return Response(user_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         return Response({'detail': 'you have no access to create user'}, status=status.HTTP_403_FORBIDDEN)

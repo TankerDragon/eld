@@ -13,4 +13,5 @@ urlpatterns = [
     # path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('drivers/', views.drivers),
     path('vehicles/', views.vehicles),
+    path('users/', views.users),
 ]

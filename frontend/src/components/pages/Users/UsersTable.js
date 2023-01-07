@@ -18,13 +18,6 @@ const getChoice = (choice, choices) => {
   return found;
 };
 
-const USER_ROLES = {
-  OWN: "Owner",
-  ADM: "Admin",
-  DIS: "Dispatcher",
-  UPD: "Updater",
-};
-
 const UsersTable = ({ users, handleEdit }) => {
   return (
     <table className="table">
@@ -34,7 +27,8 @@ const UsersTable = ({ users, handleEdit }) => {
           <th>First name</th>
           <th>Last name</th>
           <th>Username</th>
-          <th>User role</th>
+          <th>Email</th>
+          <th>Status</th>
           <th>Actions</th>
         </tr>
       </thead>
@@ -43,10 +37,11 @@ const UsersTable = ({ users, handleEdit }) => {
           return (
             <tr key={user.id}>
               <td>{index + 1}</td>
-              <td>{user.first_name}</td>
-              <td>{user.last_name}</td>
-              <td>{user.username}</td>
-              <td>{getChoice(user.role, USER_ROLES)}</td>
+              <td>{user.user.first_name}</td>
+              <td>{user.user.last_name}</td>
+              <td>{user.user.username}</td>
+              <td>{user.user.email}</td>
+              <td>{user.is_active ? 'active': 'inactive'}</td>
               <td>
                 <div className="actions">
                   <div

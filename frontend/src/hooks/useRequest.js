@@ -25,7 +25,11 @@ const useRequest = (url) => {
       console.log("***respose data", response);
       setData(response.data);
     } catch (err) {
-      createMessage({ type: "danger", content: err.message });
+      if(err.response.status === 401) {
+        navigate("/login");
+      } else {
+        createMessage({ type: "danger", content: err.message });
+      }
     }
   };
 

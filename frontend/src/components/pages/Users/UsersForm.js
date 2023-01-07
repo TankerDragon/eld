@@ -1,35 +1,35 @@
 import { useState, useEffect } from "react";
-import axios from "../../../api/axios";
-import useAuth from "../../../hooks/useAuth";
-import useMessage from "../../../hooks/useMessage";
+import useRequest from "../../../hooks/useRequest";
 import Input from "../../common/Input";
+import Checkbox from "../../common/Checkbox";
 import Select from "../../common/Select";
-
-const USER_ROLES = {
-  ADM: "Admin",
-  DIS: "Dispatcher",
-  UPD: "Updater",
-};
 
 const USERS_URL = "/api/users/";
 
 const UsersForm = ({ closeForm, method, edit }) => {
-  const { auth } = useAuth();
-  const { createMessage } = useMessage();
-
-  const [errors, setErrors] = useState({});
+  const { errors, postPutData } = useRequest(USERS_URL);
 
   const [errMsg, setErrMsg] = useState("");
 
   const [log, setLog] = useState(
     method === "PUT"
-      ? edit
+      ? {
+        ...edit.user,
+        ...edit
+      }
       : {
           first_name: "",
           last_name: "",
-          role: "DIS",
           username: "",
+          email: "",
           password: "",
+          is_active: true,
+          create_user: true,
+          update_user: true,
+          activate_user: true,
+          create_driver: true,
+          update_driver: true,
+          activate_driver: true
         }
   );
 
@@ -43,7 +43,7 @@ const UsersForm = ({ closeForm, method, edit }) => {
     setLog(newLog);
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     // validate
     // const errors = validate();
@@ -51,50 +51,12 @@ const UsersForm = ({ closeForm, method, edit }) => {
     // console.log(errors);
     // if (errors) return;
     console.log("submitted", method);
+    console.log(log);
     setErrMsg("");
-    setErrors({});
 
-    // post to server
-    try {
-      let response;
-      if (method === "POST") {
-        response = await axios.post(USERS_URL, JSON.stringify(log), {
-          headers: { "Content-Type": "application/json", Authorization: "JWT " + auth.accessToken },
-          // withCredentials: true,
-        });
-      } else if (method === "PUT") {
-        response = await axios.put(USERS_URL, JSON.stringify(log), {
-          headers: { "Content-Type": "application/json", Authorization: "JWT " + auth.accessToken },
-          // withCredentials: true,
-        });
-      }
-      console.log(response);
-      if (response.status === 201 || response.status === 200) {
-        if (response.data) {
-          createMessage({ type: "success", content: response.data.success });
-        }
-        closeForm({ reload: true });
-      }
-    } catch (err) {
-      console.log(err);
-      if (!err?.response) {
-        setErrMsg("No Server Response");
-      } else if (err.response?.status === 400) {
-        if (err.response.data) {
-          const newErrors = {};
-          Object.keys(err.response.data).forEach((s) => {
-            newErrors[s] = err.response.data[s];
-          });
-          setErrors(newErrors);
-        } else {
-          setErrMsg(err.message);
-        }
-      } else if (err.response.status === 401 || err.response.status === 403) {
-        setErrMsg(err.response.data.detail);
-      } else {
-        setErrMsg(err.message);
-      }
-    }
+    // post or put to server
+    postPutData(method, log, closeForm);
+      // closeForm({ reload: true });
   };
 
   return (
@@ -109,10 +71,27 @@ const UsersForm = ({ closeForm, method, edit }) => {
         </div>
         <div className="row">
           <Input name="username" type="text" value={log.username} label="Username" onChange={handleChange} error={errors.username} />
-          <Select name="role" selections={USER_ROLES} isObject={true} value={log.role} label="User role" onChange={handleChange} error={errors.role} />
+          <Input name="email" type="text" value={log.email} label="Email" onChange={handleChange} error={errors.email} />
         </div>
-        <div className="row">{method === "POST" && <Input name="password" type="password" value={log.password} label="Password" onChange={handleChange} error={errors.password} />}</div>
-
+        <div className="row">
+          {method === "POST" && <Input name="password" type="password" value={log.password} label="Password" onChange={handleChange} error={errors.password} />}
+          <Checkbox name="is_active" label="Active" checked={log.is_active} onChange={handleChange} error={errors.is_active}/>
+        </div>
+        <div className="row"><h4 style={{margin: "20px 30px"}}>Permissions:</h4></div>
+        <div className="row">
+          <p>User management</p>
+          <ul>
+            <li>
+              <Checkbox name="create_user" label="Create" checked={log.create_user} onChange={handleChange} error={errors.create_user}/>
+            </li>
+            <li>
+              <Checkbox name="update_user" label="Update" checked={log.update_user} onChange={handleChange} error={errors.update_user}/>
+            </li>
+            <li>
+              <Checkbox name="update_user" label="Update" checked={log.update_user} onChange={handleChange} error={errors.update_user}/>
+            </li>
+          </ul>
+        </div>
         <p className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">
           {errMsg}
         </p>

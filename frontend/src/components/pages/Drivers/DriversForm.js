@@ -25,7 +25,7 @@ const DriversForm = ({ closeForm, method, edit }) => {
           first_name: "",
           last_name: "",
           email: "",
-          phone: "",
+          phone: "+1",
           is_active: true,
           username: "",
           password: "",

@@ -16,8 +16,6 @@ const Drivers = () => {
   const [edit, setEdit] = useState({});
   const [method, setMethod] = useState("POST");
 
-  
-
   const closeForm = ({ reload }) => {
     setFormOpen(false);
     if (reload) {
