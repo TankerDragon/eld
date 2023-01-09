@@ -2,14 +2,15 @@ import { useEffect, useState } from "react";
 import useRequest from "../../../hooks/useRequest";
 import DriversTable from "./DriversTable";
 import DriversForm from "./DriversForm";
-
-const DRIVERS_URL = "/api/drivers/";
+import { DRIVERS_URL, VEHICLES_LIST_URL } from "../../../constants/constants";
 
 const Drivers = () => {
-  const { data, getData } = useRequest(DRIVERS_URL);
+  const driverRequest = useRequest(DRIVERS_URL);
+  const vehicleListRequest = useRequest(VEHICLES_LIST_URL);
 
   useEffect(() => {
-    getData();
+    driverRequest.getData();
+    vehicleListRequest.getData();
   }, []);
 
   const [formOpen, setFormOpen] = useState(false);
@@ -19,8 +20,9 @@ const Drivers = () => {
   const closeForm = ({ reload }) => {
     setFormOpen(false);
     if (reload) {
-      getData();
-    }
+      driverRequest.getData();
+      vehicleListRequest.getData();
+  }
   };
 
   const handleEdit = (driver) => {
@@ -43,8 +45,10 @@ const Drivers = () => {
           New Driver
         </button>
       </div>
-      <DriversTable drivers={data} handleEdit={handleEdit} />
-      {formOpen && <DriversForm closeForm={closeForm} method={method} edit={edit} />}
+      <div className="table-container">
+        <DriversTable drivers={driverRequest.data} vehicles={vehicleListRequest.data} handleEdit={handleEdit} />
+      </div>
+      {formOpen && <DriversForm vehicles={vehicleListRequest.data} closeForm={closeForm} method={method} edit={edit} />}
     </div>
   );
 };

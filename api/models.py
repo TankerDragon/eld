@@ -26,6 +26,10 @@ class Elduser(models.Model):
     update_driver = models.BooleanField(default=False)
     activate_driver = models.BooleanField(default=False)
 
+    create_vehicle = models.BooleanField(default=False)
+    update_vehicle = models.BooleanField(default=False)
+    activate_vehicle = models.BooleanField(default=False)
+
 class Vehicle(models.Model):
     # driver = models.ForeignKey(Driver, null=True, on_delete=models.SET_NULL)
     company = models.ForeignKey(Company, on_delete=models.CASCADE)

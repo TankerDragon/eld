@@ -1,17 +1,13 @@
 import { useState, useEffect } from "react";
 import { STATES } from "../../../constants/constants";
 import useRequest from "../../../hooks/useRequest";
+import { DRIVERS_URL } from "../../../constants/constants";
 import Input from "../../common/Input";
 import Select from "../../common/Select";
 import Checkbox from "../../common/Checkbox";
 
-const DRIVERS_URL = "/api/drivers/";
-
-const DriversForm = ({ closeForm, method, edit }) => {
-
+const DriversForm = ({ vehicles, closeForm, method, edit }) => {
   const { errors, postPutData } = useRequest(DRIVERS_URL);
-
-  // const [errors, setErrors] = useState({});
 
   const [errMsg, setErrMsg] = useState("");
 
@@ -31,15 +27,16 @@ const DriversForm = ({ closeForm, method, edit }) => {
           password: "",
           cdl_number: "",
           cdl_state: "AK",
+          vehicle: "",
         }
   );
 
-  // preparing dispatchers selections for the form
-  // const DISPATCHERS = [];
-  // DISPATCHERS.push(["", "--------"]);
-  // for (let dispatcher of dispatchers) {
-  //   DISPATCHERS.push([dispatcher.id, dispatcher.first_name + " " + dispatcher.last_name]);
-  // }
+  // preparing vehicles selections for the form
+  const VEHICLES = [];
+  VEHICLES.push(["", "--------"]);
+  for (let vehicle of vehicles) {
+    VEHICLES.push([vehicle.id, vehicle.unit_number]);
+  }
 
   const handleChange = ({ currentTarget: input }) => {
     const newLog = { ...log };
@@ -90,6 +87,7 @@ const DriversForm = ({ closeForm, method, edit }) => {
         <div className="row">
           <Input name="cdl_number" type="text" value={log.cdl_number} label="Driver License Number" onChange={handleChange} error={errors.cdl_number} />
           <Select name="cdl_state" selections={STATES} isObject={true} value={log.cdl_state} label="License State" onChange={handleChange} error={errors.cdl_state} />
+          <Select name="vehicle" selections={VEHICLES} isObject={false} value={log.vehicle} label="Truck" onChange={handleChange} error={errors.vehicle} />
         </div>
 
         <p className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">

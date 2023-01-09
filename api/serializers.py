@@ -8,30 +8,34 @@ from .models import Driver, Vehicle, Elduser
 
 class DriverSerializer(ModelSerializer):
     user = UserSerializer(read_only=True)
-
     class Meta:
         model = Driver
         fields = '__all__'
         read_only_fields = ['app_version', 'company_id']
 
-    # def create(self, validated_data):
-    #     print("******************")
-    #     print(validated_data)
 
-    #     return person
+class DriverListSerializer(ModelSerializer):
+    user = UserSerializer(read_only=True)
+    class Meta:
+        model = Driver
+        fields = ['id', 'user']
 
 
 class VehicleSerializer(ModelSerializer):
-    
     class Meta:
         model = Vehicle
         fields = '__all__'
         read_only_fields = ['company_id']
 
 
+class VehicleListSerializer(ModelSerializer):
+    class Meta:
+        model = Vehicle
+        fields = ['id', 'unit_number']
+
+
 class ELDUserSerializer(ModelSerializer):
     user = UserSerializer(read_only=True)
-
     class Meta:
         model = Elduser
         fields = '__all__'

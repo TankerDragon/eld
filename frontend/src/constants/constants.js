@@ -1,3 +1,8 @@
+export const DRIVERS_URL = "/api/drivers/";
+export const VEHICLES_URL = "/api/vehicles/";
+export const VEHICLES_LIST_URL = "/api/vehicles/?list=True";
+export const DRIVERS_LIST_URL = "/api/drivers/?list=True";
+
 export const ROLES = {
   Owner: "OWN",
   Admin: "ADM",

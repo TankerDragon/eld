@@ -42,7 +42,7 @@ const VehiclesTable = ({ vehicles, handleEdit }) => {
             <tr key={vehicle.id}>
               <td>{index + 1}</td>
               <td>{vehicle.unit_number}</td>
-              <td>***</td>
+              <td>{"**"}</td>
               <td>{vehicle.make} / {vehicle.model}</td>
               <td>{vehicle.license_number}</td>
               <td>{vehicle.license_state}</td>

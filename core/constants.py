@@ -1,6 +1,7 @@
 USER_ROLES = [
     ('OWN', 'Owner'),
     ('ADM', 'Admin'),
+    ('STA', 'Staff'),
     ('DIS', 'Dispatcher'),
     ('UPD', 'Updater'),
     ('DRI', 'Driver'),

@@ -24,12 +24,18 @@ const UsersForm = ({ closeForm, method, edit }) => {
           email: "",
           password: "",
           is_active: true,
+
           create_user: true,
           update_user: true,
           activate_user: true,
+
           create_driver: true,
           update_driver: true,
-          activate_driver: true
+          activate_driver: true,
+
+          create_vehicle: true,
+          update_vehicle: true,
+          activate_vehicle: true,
         }
   );
 
@@ -88,7 +94,35 @@ const UsersForm = ({ closeForm, method, edit }) => {
               <Checkbox name="update_user" label="Update" checked={log.update_user} onChange={handleChange} error={errors.update_user}/>
             </li>
             <li>
-              <Checkbox name="update_user" label="Update" checked={log.update_user} onChange={handleChange} error={errors.update_user}/>
+              <Checkbox name="activate_user" label="Activate / Deactivate" checked={log.activate_user} onChange={handleChange} error={errors.activate_user}/>
+            </li>
+          </ul>
+        </div>
+        <div className="row">
+          <p>Driver management</p>
+          <ul>
+            <li>
+              <Checkbox name="create_driver" label="Create" checked={log.create_driver} onChange={handleChange} error={errors.create_driver}/>
+            </li>
+            <li>
+              <Checkbox name="update_driver" label="Update" checked={log.update_driver} onChange={handleChange} error={errors.update_driver}/>
+            </li>
+            <li>
+              <Checkbox name="activate_driver" label="Activate / Deactivate" checked={log.activate_driver} onChange={handleChange} error={errors.activate_driver}/>
+            </li>
+          </ul>
+        </div>
+        <div className="row">
+          <p>Driver management</p>
+          <ul>
+            <li>
+              <Checkbox name="create_vehicle" label="Create" checked={log.create_vehicle} onChange={handleChange} error={errors.create_vehicle}/>
+            </li>
+            <li>
+              <Checkbox name="update_vehicle" label="Update" checked={log.update_vehicle} onChange={handleChange} error={errors.update_vehicle}/>
+            </li>
+            <li>
+              <Checkbox name="activate_vehicle" label="Activate / Deactivate" checked={log.activate_vehicle} onChange={handleChange} error={errors.activate_vehicle}/>
             </li>
           </ul>
         </div>

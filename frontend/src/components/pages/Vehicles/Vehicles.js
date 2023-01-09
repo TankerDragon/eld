@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
 import useRequest from "../../../hooks/useRequest";
+import { VEHICLES_URL } from "../../../constants/constants";
 import VehiclesTable from "./VehiclesTable";
 import VehiclesForm from "./VehiclesForm";
-
-const VEHICLES_URL = "/api/vehicles/";
 
 const Vehicles = () => {
   const { data, getData } = useRequest(VEHICLES_URL);
@@ -45,7 +44,9 @@ const Vehicles = () => {
           New Vehicle
         </button>
       </div>
-      <VehiclesTable vehicles={data} handleEdit={handleEdit} />
+      <div className="table-container">
+        <VehiclesTable vehicles={data} handleEdit={handleEdit} />
+      </div>
       {formOpen && <VehiclesForm closeForm={closeForm} method={method} edit={edit} />}
     </div>
   );

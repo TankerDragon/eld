@@ -45,7 +45,9 @@ const Users = () => {
           New User
         </button>
       </div>
-      <UsersTable users={data} handleEdit={handleEdit} />
+      <div className="table-container">
+        <UsersTable users={data} handleEdit={handleEdit} />
+      </div>
       {formOpen && <UsersForm closeForm={closeForm} method={method} edit={edit} />}
     </div>
   );

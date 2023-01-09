@@ -1,11 +1,10 @@
-// import icons
 import { BsPencil } from "react-icons/bs";
 
-const getName = (id, names) => {
-  for (let name of names) {
-    if (name.id === id) return name.first_name + " " + name.last_name;
+const getUnitNumber = (id, units) => {
+  for (let unit of units) {
+    if (unit.id === id) return unit.unit_number;
   }
-  return "! name not found !";
+  return null;
 };
 
 const getChoice = (choice, choices) => {
@@ -18,7 +17,7 @@ const getChoice = (choice, choices) => {
   return found;
 };
 
-const DriversTable = ({ drivers, handleEdit }) => {
+const DriversTable = ({ drivers, vehicles, handleEdit }) => {
   return (
     <table className="table">
       <thead>
@@ -45,7 +44,7 @@ const DriversTable = ({ drivers, handleEdit }) => {
               <td>{driver.user.username}</td>
               <td>{driver.user.email}</td>
               <td>{driver.phone}</td>
-              <td>***</td>
+              <td>{getUnitNumber(driver.vehicle, vehicles)}</td>
               <td>{driver.is_active ? 'active': 'inactive'}</td>
               <td>{driver.app_version}</td>
               <td>
