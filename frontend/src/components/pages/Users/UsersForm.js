@@ -113,7 +113,7 @@ const UsersForm = ({ closeForm, method, edit }) => {
           </ul>
         </div>
         <div className="row">
-          <p>Driver management</p>
+          <p>Vehicle management</p>
           <ul>
             <li>
               <Checkbox name="create_vehicle" label="Create" checked={log.create_vehicle} onChange={handleChange} error={errors.create_vehicle}/>

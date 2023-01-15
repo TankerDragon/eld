@@ -196,16 +196,19 @@ def users(request):
             if r_elduser['update_user']:
                 elduser = Elduser.objects.get(pk=request.data.get('id'))
                 user = User.objects.get(pk = elduser.user_id)
-                elduser_serializer = ELDUserSerializer(instance=elduser, data=request.data)
-                user_serializer = UserSerializer(instance=user, data=request.data)
-                # data validation
-                valid_user = user_serializer.is_valid()
-                valid_elduser = elduser_serializer.is_valid()
-                if valid_user and valid_elduser:
-                    user_serializer.save()
-                    elduser_serializer.save()
-                    return Response({'success': 'user has been succesfully updated'}, status=status.HTTP_200_OK)
-                return Response(user_serializer.errors | elduser_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+                # check if user is not updating himself
+                if not request.user == user:
+                    elduser_serializer = ELDUserSerializer(instance=elduser, data=request.data)
+                    user_serializer = UserSerializer(instance=user, data=request.data)
+                    # data validation
+                    valid_user = user_serializer.is_valid()
+                    valid_elduser = elduser_serializer.is_valid()
+                    if valid_user and valid_elduser:
+                        user_serializer.save()
+                        elduser_serializer.save()
+                        return Response({'success': 'user has been succesfully updated'}, status=status.HTTP_200_OK)
+                    return Response(user_serializer.errors | elduser_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+                return Response({'detail': 'you cannot update yourself'}, status=status.HTTP_403_FORBIDDEN)
             return Response({'detail': 'you have no access to update user'}, status=status.HTTP_403_FORBIDDEN)
         return Response({'detail': '"id" is required to update user'}, status=status.HTTP_400_BAD_REQUEST)
 

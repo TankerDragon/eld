@@ -28,7 +28,7 @@ const Message = ({ message }) => {
     },
     exit: {
       opacity: 0,
-      x: "200px",
+      x: "200px"
     },
   };
 

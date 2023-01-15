@@ -27,7 +27,7 @@ const App = () => {
 
         {/* protected routes */}
         <Route path="/" element={<Layout />}>
-          <Route element={<RequireAuth allowedRoles={[ROLES.Owner, ROLES.Admin, ROLES.Dispatcher, ROLES.Updater]} />}>
+          <Route element={<RequireAuth allowedRoles={[ROLES.Owner, ROLES.Staff]} />}>
             <Route path="gross-board" element={<GrossBoard />} />
             <Route path="drivers" element={<Drivers />} />
             <Route path="vehicles" element={<Vehicles />} />

@@ -5,6 +5,7 @@ export const DRIVERS_LIST_URL = "/api/drivers/?list=True";
 
 export const ROLES = {
   Owner: "OWN",
+  Staff: "STA",
   Admin: "ADM",
   Dispatcher: "DIS",
   Updater: "UPD",
