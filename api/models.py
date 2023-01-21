@@ -66,6 +66,10 @@ class Driver(models.Model):
         return self.first_name + ' ' + self.last_name
 
 
+
+
+
+
 # class Log(models.Model):
 #     driver = models.ForeignKey(Driver, on_delete=models.CASCADE)
 #     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user')
