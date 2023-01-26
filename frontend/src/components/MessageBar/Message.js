@@ -3,11 +3,12 @@ import { useEffect, useState } from "react";
 import { ImCross } from "react-icons/im";
 
 const Message = ({ message }) => {
-  const [visible, setVisible] = useState(true);
+  const [visible, setVisible] = useState(message.visible);
 
   useEffect(() => {
     setTimeout(() => {
       setVisible(false);
+      message.visible = false;
     }, 7000);
   }, []);
 

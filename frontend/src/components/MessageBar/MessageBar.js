@@ -7,7 +7,7 @@ const MessageBar = () => {
   return (
     <div className="message-bar">
       {messages.map((msg) => {
-        return <Message message={msg} />;
+        return <Message message={msg} />
       })}
     </div>
   );

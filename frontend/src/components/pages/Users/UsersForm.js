@@ -2,12 +2,12 @@ import { useState, useEffect } from "react";
 import useRequest from "../../../hooks/useRequest";
 import Input from "../../common/Input";
 import Checkbox from "../../common/Checkbox";
-import Select from "../../common/Select";
+import LoadingButton from "../../common/LoadingButton";
 
 const USERS_URL = "/api/users/";
 
 const UsersForm = ({ closeForm, method, edit }) => {
-  const { errors, postPutData } = useRequest(USERS_URL);
+  const { errors, postPutData, isLoading } = useRequest(USERS_URL);
 
   const [errMsg, setErrMsg] = useState("");
 
@@ -84,54 +84,58 @@ const UsersForm = ({ closeForm, method, edit }) => {
           <Checkbox name="is_active" label="Active" checked={log.is_active} onChange={handleChange} error={errors.is_active}/>
         </div>
         <div className="row"><h4 style={{margin: "20px 30px"}}>Permissions:</h4></div>
-        <div className="row">
-          <p>User management</p>
-          <ul>
-            <li>
-              <Checkbox name="create_user" label="Create" checked={log.create_user} onChange={handleChange} error={errors.create_user}/>
-            </li>
-            <li>
-              <Checkbox name="update_user" label="Update" checked={log.update_user} onChange={handleChange} error={errors.update_user}/>
-            </li>
-            <li>
-              <Checkbox name="activate_user" label="Activate / Deactivate" checked={log.activate_user} onChange={handleChange} error={errors.activate_user}/>
-            </li>
-          </ul>
-        </div>
-        <div className="row">
-          <p>Driver management</p>
-          <ul>
-            <li>
-              <Checkbox name="create_driver" label="Create" checked={log.create_driver} onChange={handleChange} error={errors.create_driver}/>
-            </li>
-            <li>
-              <Checkbox name="update_driver" label="Update" checked={log.update_driver} onChange={handleChange} error={errors.update_driver}/>
-            </li>
-            <li>
-              <Checkbox name="activate_driver" label="Activate / Deactivate" checked={log.activate_driver} onChange={handleChange} error={errors.activate_driver}/>
-            </li>
-          </ul>
-        </div>
-        <div className="row">
-          <p>Vehicle management</p>
-          <ul>
-            <li>
-              <Checkbox name="create_vehicle" label="Create" checked={log.create_vehicle} onChange={handleChange} error={errors.create_vehicle}/>
-            </li>
-            <li>
-              <Checkbox name="update_vehicle" label="Update" checked={log.update_vehicle} onChange={handleChange} error={errors.update_vehicle}/>
-            </li>
-            <li>
-              <Checkbox name="activate_vehicle" label="Activate / Deactivate" checked={log.activate_vehicle} onChange={handleChange} error={errors.activate_vehicle}/>
-            </li>
-          </ul>
+        <div className="permission-table">
+          <div className="row">
+            <p>User management</p>
+            <ul>
+              <li>
+                <Checkbox name="create_user" label="Create" checked={log.create_user} onChange={handleChange} error={errors.create_user}/>
+              </li>
+              <li>
+                <Checkbox name="update_user" label="Update" checked={log.update_user} onChange={handleChange} error={errors.update_user}/>
+              </li>
+              <li>
+                <Checkbox name="activate_user" label="Activate" checked={log.activate_user} onChange={handleChange} error={errors.activate_user}/>
+              </li>
+            </ul>
+          </div>
+          <div className="row">
+            <p>Driver management</p>
+            <ul>
+              <li>
+                <Checkbox name="create_driver" label="Create" checked={log.create_driver} onChange={handleChange} error={errors.create_driver}/>
+              </li>
+              <li>
+                <Checkbox name="update_driver" label="Update" checked={log.update_driver} onChange={handleChange} error={errors.update_driver}/>
+              </li>
+              <li>
+                <Checkbox name="activate_driver" label="Activate" checked={log.activate_driver} onChange={handleChange} error={errors.activate_driver}/>
+              </li>
+            </ul>
+          </div>
+          <div className="row">
+            <p>Vehicle management</p>
+            <ul>
+              <li>
+                <Checkbox name="create_vehicle" label="Create" checked={log.create_vehicle} onChange={handleChange} error={errors.create_vehicle}/>
+              </li>
+              <li>
+                <Checkbox name="update_vehicle" label="Update" checked={log.update_vehicle} onChange={handleChange} error={errors.update_vehicle}/>
+              </li>
+              <li>
+                <Checkbox name="activate_vehicle" label="Activate" checked={log.activate_vehicle} onChange={handleChange} error={errors.activate_vehicle}/>
+              </li>
+            </ul>
+          </div>
         </div>
         <p className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">
           {errMsg}
         </p>
         <div className="buttons">
           <div>
-            <button>OK</button>
+            {
+              isLoading ? <LoadingButton /> : <button>OK</button>
+            }
             <button onClick={closeForm}>Cancel</button>
           </div>
         </div>

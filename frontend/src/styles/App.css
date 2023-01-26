@@ -63,8 +63,8 @@ body {
   -moz-transform: scale(1.5); /* FF */
   -webkit-transform: scale(1.5); /* Safari and Chrome */
   -o-transform: scale(1.5); /* Opera */
-  transform: scale(1.5);
-  padding: 10px;
+  transform: scale(1.2);
+  /* padding: 10px; */
 }
 /*  */
 .row {
@@ -340,4 +340,41 @@ body {
 }
 .message-bar .success {
   background-color: rgb(74, 178, 72);
+}
+
+/*  */
+
+.permission-table .row {
+  margin: 5px;
+}
+.permission-table ul {
+  width: 60%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.permission-table ul li{
+  width: 120px;
+  list-style-type: none;
+}
+.permission-table .input {
+  margin: 0;
+}
+.permission-table .input .row {
+  width: 100px;
+}
+
+/*  */
+.loading {
+  width: 100%;
+  min-height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.loadingButton {
+  padding: 3px !important;
+}
+.loadingButton img {
+  width: 20px;
 }

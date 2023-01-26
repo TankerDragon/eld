@@ -10,22 +10,28 @@ const useRequest = (url) => {
   const navigate = useNavigate();
 
   const [data, setData] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState({});
 
   // useEffect(() => {
   //   getData();
   // }, []);
 
+
   const getData = async () => {
+    setIsLoading(true);
     try {
       const response = await axios.get(url, {
         headers: { "Content-Type": "application/json", Authorization: "JWT " + auth.accessToken },
         // withCredentials: true,
       });
-      console.log("***respose data", response);
+      setIsLoading(false);
       setData(response.data);
     } catch (err) {
-      if(err.response.status === 401) {
+      setIsLoading(false);
+      if (!err?.response) {
+        createMessage({ type: "danger", content: "No Server Response" });
+      }else if(err.response.status === 401) {
         navigate("/login");
       } else {
         createMessage({ type: "danger", content: err.message });
@@ -35,6 +41,7 @@ const useRequest = (url) => {
 
   const postPutData = async (method, log, closeForm) => {
     setErrors({});
+    setIsLoading(true);
 
     try {
       let response;
@@ -50,6 +57,7 @@ const useRequest = (url) => {
         });
       }
 
+      setIsLoading(false);
       console.log("response###", response);
       if (response.status === 201 || response.status === 200) {
         if (response.data) {
@@ -58,6 +66,7 @@ const useRequest = (url) => {
         closeForm({ reload: true });
       }
     } catch (err) {
+      setIsLoading(false);
       console.log(err);
       if (!err?.response) {
         createMessage({ type: "danger", content: "No Server Response" });
@@ -79,7 +88,7 @@ const useRequest = (url) => {
     }
   }
 
-  return { data, errors, getData, postPutData };
+  return { data, errors, isLoading, getData, postPutData };
 };
 
 export default useRequest;

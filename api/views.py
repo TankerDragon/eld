@@ -13,7 +13,7 @@ from .models import Driver, Vehicle, Elduser
 from .serializers import DriverSerializer, DriverListSerializer, VehicleSerializer, VehicleListSerializer, ELDUserSerializer
 # from .tasks import notify_customers
 import datetime
-
+import time
 
 def check_permission(requeset):
     return False
@@ -29,18 +29,23 @@ def test(request):
 @permission_classes([AllowAny])
 def drivers(request):
     if request.method == 'GET':
+        # get elduser's fields
+        elduser = Elduser.objects.values('company_id').get(user_id=request.user.id)
+        print(elduser)
         if request.GET.get('list'):
-            query = Driver.objects.all()
+            query = Driver.objects.filter(company_id=elduser['company_id'])
             serializer = DriverListSerializer(query, many=True)
         elif request.GET.get('id'):
-            query = Driver.objects.select_related('user').get(pk = request.GET.get('id'))
+            query = Driver.objects.select_related('user').get(pk = request.GET.get('id'), company_id=elduser['company_id'])
             serializer = DriverSerializer(query)
         else:
-            query = Driver.objects.select_related('user').all()
+            query = Driver.objects.select_related('user').filter(company_id=elduser['company_id'])
             serializer = DriverSerializer(query, many=True)
+        time.sleep(1)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     if request.method == 'POST':
+        time.sleep(1)
         # get elduser's fields
         elduser = Elduser.objects.values('company_id', 'create_driver').get(user_id=request.user.id)
         if elduser['create_driver']:
@@ -64,6 +69,7 @@ def drivers(request):
         return Response({'detail': 'you have no access to create driver'}, status=status.HTTP_403_FORBIDDEN)
 
     if request.method == 'PUT':
+        time.sleep(1)
         if request.data.get('id'):
             elduser = Elduser.objects.values('update_driver').get(user_id=request.user.id)
             if elduser['update_driver']:
@@ -114,18 +120,22 @@ def drivers(request):
 @permission_classes([AllowAny])
 def vehicles(request):
     if request.method == 'GET':
+        time.sleep(1)
+        # get elduser's fields
+        elduser = Elduser.objects.values('company_id').get(user_id=request.user.id)
         if request.GET.get('list'):
-            query = Vehicle.objects.values('id', 'unit_number').all()
+            query = Vehicle.objects.values('id', 'unit_number').filter(company_id=elduser['company_id'])
             serializer = VehicleListSerializer(query, many=True)
         elif request.GET.get('id'):
-            query = Vehicle.objects.get(pk = request.GET.get('id'))
+            query = Vehicle.objects.get(pk = request.GET.get('id'), company_id=elduser['company_id'])
             serializer = VehicleSerializer(query)
         else:
-            query = Vehicle.objects.all()
+            query = Vehicle.objects.filter(company_id=elduser['company_id'])
             serializer = VehicleSerializer(query, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     if request.method == 'POST':
+        time.sleep(1)
         # get elduser's fields
         elduser = Elduser.objects.values('company_id', 'create_vehicle').get(user_id=request.user.id)
         if elduser['create_vehicle']:
@@ -139,6 +149,7 @@ def vehicles(request):
         return Response({'detail': 'you have no access to create vehicle'}, status=status.HTTP_403_FORBIDDEN)
 
     if request.method == 'PUT':
+        time.sleep(1)
         if request.GET.get('id'):
             elduser = Elduser.objects.values('update_vehicle').get(user_id=request.user.id)
             if elduser['update_vehicle']:
@@ -156,15 +167,19 @@ def vehicles(request):
 @permission_classes([AllowAny])
 def users(request):
     if request.method == 'GET':
+        time.sleep(1)
+        # get elduser's fields
+        elduser = Elduser.objects.values('company_id').get(user_id=request.user.id)
         if request.GET.get('id'):
-            user = Elduser.objects.select_related('user').get(pk=request.GET.get('id'), user__role = 'STA')
+            user = Elduser.objects.select_related('user').get(pk=request.GET.get('id'), user__role = 'STA', company_id=elduser['company_id'])
             user_serializer = ELDUserSerializer(user)
         else:
-            users = Elduser.objects.select_related('user').filter(user__role = 'STA')
+            users = Elduser.objects.select_related('user').filter(user__role = 'STA', company_id=elduser['company_id'])
             user_serializer = ELDUserSerializer(users, many=True)
         return Response(user_serializer.data, status=status.HTTP_200_OK)
 
     if request.method == 'POST':
+        time.sleep(1)
         elduser = Elduser.objects.values('company_id', 'create_user').get(user_id=request.user.id)
         # set user role and company id
         request.data['role'] = "STA"
@@ -188,6 +203,7 @@ def users(request):
         return Response({'detail': 'you have no access to create user'}, status=status.HTTP_403_FORBIDDEN)
 
     if request.method == 'PUT':
+        time.sleep(1)
         if request.data.get('id'):
             r_elduser = Elduser.objects.values('update_user').get(user_id=request.user.id)
             # set user role

@@ -4,12 +4,13 @@ import useRequest from "../../../hooks/useRequest";
 import Input from "../../common/Input";
 import Select from "../../common/Select";
 import Checkbox from "../../common/Checkbox";
+import LoadingButton from "../../common/LoadingButton";
 
 const VEHICLES_URL = "/api/vehicles/";
 
 const VehiclesForm = ({ closeForm, method, edit }) => {
 
-  const { errors, postPutData } = useRequest(VEHICLES_URL);
+  const { errors, postPutData, isLoading } = useRequest(VEHICLES_URL);
 
   // const [errors, setErrors] = useState({});
 
@@ -93,7 +94,9 @@ const VehiclesForm = ({ closeForm, method, edit }) => {
         </p>
         <div className="buttons">
           <div>
-            <button>OK</button>
+            {
+              isLoading ? <LoadingButton /> : <button>OK</button>
+            }
             <button onClick={closeForm}>Cancel</button>
           </div>
         </div>

@@ -5,9 +5,10 @@ import { DRIVERS_URL } from "../../../constants/constants";
 import Input from "../../common/Input";
 import Select from "../../common/Select";
 import Checkbox from "../../common/Checkbox";
+import LoadingButton from "../../common/LoadingButton";
 
 const DriversForm = ({ vehicles, closeForm, method, edit }) => {
-  const { errors, postPutData } = useRequest(DRIVERS_URL);
+  const { errors, postPutData, isLoading } = useRequest(DRIVERS_URL);
 
   const [errMsg, setErrMsg] = useState("");
 
@@ -95,7 +96,9 @@ const DriversForm = ({ vehicles, closeForm, method, edit }) => {
         </p>
         <div className="buttons">
           <div>
-            <button>OK</button>
+            {
+              isLoading ? <LoadingButton /> : <button>OK</button>
+            }
             <button onClick={closeForm}>Cancel</button>
           </div>
         </div>

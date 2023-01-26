@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import useRequest from "../../../hooks/useRequest";
 import DriversTable from "./DriversTable";
 import DriversForm from "./DriversForm";
+import Loading from "../../common/Loading";
 import { DRIVERS_URL, VEHICLES_LIST_URL } from "../../../constants/constants";
 
 const Drivers = () => {
@@ -45,9 +46,13 @@ const Drivers = () => {
           New Driver
         </button>
       </div>
-      <div className="table-container">
-        <DriversTable drivers={driverRequest.data} vehicles={vehicleListRequest.data} handleEdit={handleEdit} />
-      </div>
+      {
+        driverRequest.isLoading || vehicleListRequest.isLoading ? <Loading /> :
+        <div className="table-container">
+          <DriversTable drivers={driverRequest.data} vehicles={vehicleListRequest.data} handleEdit={handleEdit} />
+        </div>
+      }
+      
       {formOpen && <DriversForm vehicles={vehicleListRequest.data} closeForm={closeForm} method={method} edit={edit} />}
     </div>
   );
