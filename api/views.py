@@ -1,6 +1,4 @@
-# data['date'] = datetime.date.today()
-# data['time'] = datetime.datetime.now().strftime("%H:%M:%S")
-###
+
 from django.shortcuts import render, HttpResponse
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
@@ -29,6 +27,7 @@ def test(request):
 @permission_classes([AllowAny])
 def drivers(request):
     if request.method == 'GET':
+        time.sleep(1)
         # get elduser's fields
         elduser = Elduser.objects.values('company_id').get(user_id=request.user.id)
         print(elduser)
@@ -41,7 +40,6 @@ def drivers(request):
         else:
             query = Driver.objects.select_related('user').filter(company_id=elduser['company_id'])
             serializer = DriverSerializer(query, many=True)
-        time.sleep(1)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     if request.method == 'POST':
