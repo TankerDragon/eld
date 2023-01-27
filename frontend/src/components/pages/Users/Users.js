@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { AnimatePresence } from "framer-motion";
 import useRequest from "../../../hooks/useRequest";
 import UsersTable from "./UsersTable";
 import UsersForm from "./UsersForm";
@@ -52,7 +53,9 @@ const Users = () => {
           <UsersTable users={data} handleEdit={handleEdit} />
         </div>
       }
-      {formOpen && <UsersForm closeForm={closeForm} method={method} edit={edit} />}
+      <AnimatePresence initial={false}>
+        {formOpen && <UsersForm closeForm={closeForm} method={method} edit={edit} />}
+      </AnimatePresence>
     </div>
   );
 };

@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { STATES } from "../../../constants/constants";
 import useRequest from "../../../hooks/useRequest";
 import { DRIVERS_URL } from "../../../constants/constants";
+import Form from "../../common/Form";
 import Input from "../../common/Input";
 import Select from "../../common/Select";
 import Checkbox from "../../common/Checkbox";
@@ -66,7 +67,7 @@ const DriversForm = ({ vehicles, closeForm, method, edit }) => {
   };
 
   return (
-    <div className="form drivers-form">
+    <Form>
       <div className="row">
         <h1>Add new driver</h1>
       </div>
@@ -103,7 +104,7 @@ const DriversForm = ({ vehicles, closeForm, method, edit }) => {
           </div>
         </div>
       </form>
-    </div>
+    </Form>
   );
 };  
 

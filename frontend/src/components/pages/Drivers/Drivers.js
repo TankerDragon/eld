@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import useRequest from "../../../hooks/useRequest";
+import { AnimatePresence } from "framer-motion";
 import DriversTable from "./DriversTable";
 import DriversForm from "./DriversForm";
 import Loading from "../../common/Loading";
@@ -52,8 +53,9 @@ const Drivers = () => {
           <DriversTable drivers={driverRequest.data} vehicles={vehicleListRequest.data} handleEdit={handleEdit} />
         </div>
       }
-      
-      {formOpen && <DriversForm vehicles={vehicleListRequest.data} closeForm={closeForm} method={method} edit={edit} />}
+      <AnimatePresence initial={false}>
+        {formOpen && <DriversForm vehicles={vehicleListRequest.data} closeForm={closeForm} method={method} edit={edit} />}
+      </AnimatePresence>
     </div>
   );
 };

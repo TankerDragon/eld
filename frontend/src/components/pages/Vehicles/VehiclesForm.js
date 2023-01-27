@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { STATES, TRUCK_YEARS, FUEL_TYPE } from "../../../constants/constants";
 import useRequest from "../../../hooks/useRequest";
+import Form from "../../common/Form";
 import Input from "../../common/Input";
 import Select from "../../common/Select";
 import Checkbox from "../../common/Checkbox";
@@ -68,7 +69,7 @@ const VehiclesForm = ({ closeForm, method, edit }) => {
   };
 
   return (
-    <div className="form drivers-form">
+    <Form>
       <div className="row">
         <h1>Add new vehicle</h1>
       </div>
@@ -101,7 +102,7 @@ const VehiclesForm = ({ closeForm, method, edit }) => {
           </div>
         </div>
       </form>
-    </div>
+    </Form>
   );
 };  
 

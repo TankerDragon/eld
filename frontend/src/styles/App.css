@@ -51,7 +51,7 @@ body {
   width: 100%;
   font-size: 1rem;
   padding: 7px 10px;
-  border-radius: 20px;
+  border-radius: 5px;
   border: 1px solid #4b4b4b;
 }
 .input select {
@@ -291,7 +291,9 @@ body {
 /* forms */
 .form {
   background: var(--color-container);
-  box-shadow: 0px 0px 7px 0px var(--color-box-shadow);
+  box-shadow: 0px 0px 10px 0px var(--color-box-shadow);
+  border: 1px solid rgb(179, 179, 179);
+  width: 800px;
   position: fixed;
   left: 50%;
   top: 50%;
@@ -299,13 +301,10 @@ body {
   z-index: 3;
   max-width: 1400px;
   padding: 20px;
-  border-radius: 20px;
+  border-radius: 10px;
 }
 .gross-form {
   width: 1100px;
-}
-.drivers-form {
-  width: 800px;
 }
 /*  */
 .message-bar {

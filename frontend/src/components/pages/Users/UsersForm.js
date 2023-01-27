@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import useRequest from "../../../hooks/useRequest";
+import Form from "../../common/Form";
 import Input from "../../common/Input";
 import Checkbox from "../../common/Checkbox";
 import LoadingButton from "../../common/LoadingButton";
@@ -66,7 +67,7 @@ const UsersForm = ({ closeForm, method, edit }) => {
   };
 
   return (
-    <div className="form drivers-form">
+    <Form>
       <div className="row">
         <h1>Add new user</h1>
       </div>
@@ -140,7 +141,7 @@ const UsersForm = ({ closeForm, method, edit }) => {
           </div>
         </div>
       </form>
-    </div>
+    </Form>
   );
 };
 

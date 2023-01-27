@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import useRequest from "../../../hooks/useRequest";
+import { AnimatePresence } from "framer-motion";
 import { VEHICLES_URL } from "../../../constants/constants";
 import VehiclesTable from "./VehiclesTable";
 import VehiclesForm from "./VehiclesForm";
@@ -51,7 +52,9 @@ const Vehicles = () => {
           <VehiclesTable vehicles={data} handleEdit={handleEdit} />
         </div>
       }
-      {formOpen && <VehiclesForm closeForm={closeForm} method={method} edit={edit} />}
+      <AnimatePresence initial={false}>
+        {formOpen && <VehiclesForm closeForm={closeForm} method={method} edit={edit} />}
+      </AnimatePresence>
     </div>
   );
 };
