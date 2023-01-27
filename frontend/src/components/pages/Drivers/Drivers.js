@@ -24,7 +24,7 @@ const Drivers = () => {
     if (reload) {
       driverRequest.getData();
       vehicleListRequest.getData();
-  }
+    }
   };
 
   const handleEdit = (driver) => {
@@ -41,7 +41,7 @@ const Drivers = () => {
           className="button"
           onClick={() => {
             setMethod("POST");
-            setFormOpen(!formOpen);
+            setFormOpen(true);
           }}
         >
           New Driver

@@ -41,7 +41,7 @@ const Users = () => {
           className="button"
           onClick={() => {
             setMethod("POST");
-            setFormOpen(!formOpen);
+            setFormOpen(true);
           }}
         >
           New User

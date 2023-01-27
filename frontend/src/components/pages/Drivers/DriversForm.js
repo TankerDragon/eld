@@ -65,6 +65,10 @@ const DriversForm = ({ vehicles, closeForm, method, edit }) => {
     postPutData(method, log, closeForm);
       // closeForm({ reload: true });
   };
+  const handelCancel = (e) => {
+    e.preventDefault();
+    closeForm({reload: false});
+  }
 
   return (
     <Form>
@@ -100,7 +104,7 @@ const DriversForm = ({ vehicles, closeForm, method, edit }) => {
             {
               isLoading ? <LoadingButton /> : <button>OK</button>
             }
-            <button onClick={closeForm}>Cancel</button>
+            <button onClick={handelCancel}>Cancel</button>
           </div>
         </div>
       </form>

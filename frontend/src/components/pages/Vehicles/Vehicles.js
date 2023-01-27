@@ -40,7 +40,7 @@ const Vehicles = () => {
           className="button"
           onClick={() => {
             setMethod("POST");
-            setFormOpen(!formOpen);
+            setFormOpen(true);
           }}
         >
           New Vehicle
