@@ -1,7 +1,7 @@
 from django.db import models
 from django.conf import settings
 from core.models import User
-from core.constants import STATES, YEARS, DEFAULT_YEAR, FUEL_TYPE, COUNTRIES, TIME_ZONES
+from core.constants import STATES, YEARS, DEFAULT_YEAR, FUEL_TYPE, COUNTRIES, TIME_ZONES, STATUS_CHOICES
 
 # settings.AUTH_USER_MODEL
 class Company(models.Model):
@@ -66,6 +66,22 @@ class Driver(models.Model):
         return self.first_name + ' ' + self.last_name
 
 
+class Log(models.Model):
+    driver = models.ForeignKey(Driver, on_delete=models.CASCADE)
+    vehicle = models.ForeignKey(Vehicle, on_delete=models.SET_NULL, null=True, blank=True)
+    status = models.CharField(max_length=3, choices= STATUS_CHOICES, default='OFF')
+    date = models.DateField()
+    time = models.TimeField()
+    location = models.CharField(max_length=50, null=True, blank=True)
+    lat = models.DecimalField(max_digits=12, decimal_places=9, null=True, blank=True)
+    lng = models.DecimalField(max_digits=12, decimal_places=9, null=True, blank=True)
+    odometer = models.IntegerField(null=True, blank=True)
+    eng_hours = models.DecimalField(max_digits=6, decimal_places=1, null=True, blank=True)
+    notes = models.CharField(max_length=20, null=True, blank=True)
+    document = models.CharField(max_length=20, null=True, blank=True)
+    trailer = models.CharField(max_length=20, null=True, blank=True)
+
+
 
 
 
@@ -107,17 +123,3 @@ class Driver(models.Model):
 #     time = models.DateTimeField(auto_now_add=True)
 
 # ELD stuff 
-# class Elog(models.Model):
-#     driver = models.ForeignKey(Driver, on_delete=models.CASCADE)
-#     status = models.CharField(max_length=3, choices= STATUS_CHOICES_TTDATA, default='OFF')
-#     date = models.DateField()
-#     time = models.TimeField()
-#     location = models.CharField(max_length=50, null=True, blank=True)
-#     lat = models.DecimalField(max_digits=12, decimal_places=9, null=True, blank=True)
-#     lng = models.DecimalField(max_digits=12, decimal_places=9, null=True, blank=True)
-#     vehicle = models.ForeignKey(Vehicle, on_delete=models.SET_NULL, null=True, blank=True)
-#     odometer = models.IntegerField(null=True, blank=True)
-#     eng_hours = models.DecimalField(max_digits=6, decimal_places=1, null=True, blank=True)
-#     notes = models.CharField(max_length=20, null=True, blank=True)
-#     document = models.CharField(max_length=20, null=True, blank=True)
-#     trailer = models.CharField(max_length=20, null=True, blank=True)

@@ -109,7 +109,7 @@ TARGET_NAMES = [
     ('lin', 'invite link'),
 ]
 
-STATUS_CHOICES_TTDATA = [
+STATUS_CHOICES = [
     ('OFF', 'OFF'),
     ('SB', 'SB'),
     ('DR', 'DR'),
