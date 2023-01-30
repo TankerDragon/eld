@@ -18,17 +18,25 @@ class Elduser(models.Model):
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
     is_active = models.BooleanField(default=1)
 
+    view_user = models.BooleanField(default=False)
     create_user = models.BooleanField(default=False)
     update_user = models.BooleanField(default=False)
     activate_user = models.BooleanField(default=False)
 
+    view_driver = models.BooleanField(default=False)
     create_driver = models.BooleanField(default=False)
     update_driver = models.BooleanField(default=False)
     activate_driver = models.BooleanField(default=False)
 
+    view_vehicle = models.BooleanField(default=False)
     create_vehicle = models.BooleanField(default=False)
     update_vehicle = models.BooleanField(default=False)
     activate_vehicle = models.BooleanField(default=False)
+
+    view_driver_log = models.BooleanField(default=False)
+    create_driver_log = models.BooleanField(default=False)
+    update_driver_log = models.BooleanField(default=False)
+    activate_driver_log = models.BooleanField(default=False)
 
 class Vehicle(models.Model):
     # driver = models.ForeignKey(Driver, null=True, on_delete=models.SET_NULL)

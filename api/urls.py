@@ -14,4 +14,5 @@ urlpatterns = [
     path('drivers/', views.drivers),
     path('vehicles/', views.vehicles),
     path('users/', views.users),
+    path('driver/logs/', views.driver_log),
 ]

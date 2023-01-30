@@ -3,7 +3,7 @@ from core.serializers import UserSerializer, UserCreateSerializer
 from rest_framework import serializers
 from django.contrib.auth.hashers import make_password
 from core.models import User
-from .models import Driver, Vehicle, Elduser
+from .models import Driver, Vehicle, Elduser, Log
 
 
 class DriverSerializer(ModelSerializer):
@@ -38,6 +38,11 @@ class ELDUserSerializer(ModelSerializer):
     user = UserSerializer(read_only=True)
     class Meta:
         model = Elduser
+        fields = '__all__'
+
+class DriverLogSerializer(ModelSerializer):
+    class Meta:
+        model = Log
         fields = '__all__'
 
 

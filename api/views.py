@@ -7,8 +7,8 @@ from rest_framework import status
 from django.db.models import Q
 from core.serializers import UserSerializer, UserCreateSerializer
 from core.models import User
-from .models import Driver, Vehicle, Elduser
-from .serializers import DriverSerializer, DriverListSerializer, VehicleSerializer, VehicleListSerializer, ELDUserSerializer
+from .models import Driver, Vehicle, Elduser, Log
+from .serializers import DriverSerializer, DriverListSerializer, VehicleSerializer, VehicleListSerializer, ELDUserSerializer, DriverLogSerializer
 # from .tasks import notify_customers
 import datetime
 import time
@@ -26,8 +26,8 @@ def test(request):
 @api_view(['GET', 'POST', 'PUT'])
 @permission_classes([AllowAny])
 def drivers(request):
+    time.sleep(1)
     if request.method == 'GET':
-        time.sleep(1)
         # get elduser's fields
         elduser = Elduser.objects.values('company_id').get(user_id=request.user.id)
         print(elduser)
@@ -43,7 +43,6 @@ def drivers(request):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     if request.method == 'POST':
-        time.sleep(1)
         # get elduser's fields
         elduser = Elduser.objects.values('company_id', 'create_driver').get(user_id=request.user.id)
         if elduser['create_driver']:
@@ -67,7 +66,6 @@ def drivers(request):
         return Response({'detail': 'you have no access to create driver'}, status=status.HTTP_403_FORBIDDEN)
 
     if request.method == 'PUT':
-        time.sleep(1)
         if request.data.get('id'):
             elduser = Elduser.objects.values('update_driver').get(user_id=request.user.id)
             if elduser['update_driver']:
@@ -117,8 +115,8 @@ def drivers(request):
 @api_view(['GET', 'POST', 'PUT'])
 @permission_classes([AllowAny])
 def vehicles(request):
+    time.sleep(1)
     if request.method == 'GET':
-        time.sleep(1)
         # get elduser's fields
         elduser = Elduser.objects.values('company_id').get(user_id=request.user.id)
         if request.GET.get('list'):
@@ -133,7 +131,6 @@ def vehicles(request):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     if request.method == 'POST':
-        time.sleep(1)
         # get elduser's fields
         elduser = Elduser.objects.values('company_id', 'create_vehicle').get(user_id=request.user.id)
         if elduser['create_vehicle']:
@@ -147,7 +144,6 @@ def vehicles(request):
         return Response({'detail': 'you have no access to create vehicle'}, status=status.HTTP_403_FORBIDDEN)
 
     if request.method == 'PUT':
-        time.sleep(1)
         if request.GET.get('id'):
             elduser = Elduser.objects.values('update_vehicle').get(user_id=request.user.id)
             if elduser['update_vehicle']:
@@ -164,8 +160,8 @@ def vehicles(request):
 @api_view(['GET', 'POST', 'PUT'])
 @permission_classes([AllowAny])
 def users(request):
+    time.sleep(1)
     if request.method == 'GET':
-        time.sleep(1)
         # get elduser's fields
         elduser = Elduser.objects.values('company_id').get(user_id=request.user.id)
         if request.GET.get('id'):
@@ -177,7 +173,6 @@ def users(request):
         return Response(user_serializer.data, status=status.HTTP_200_OK)
 
     if request.method == 'POST':
-        time.sleep(1)
         elduser = Elduser.objects.values('company_id', 'create_user').get(user_id=request.user.id)
         # set user role and company id
         request.data['role'] = "STA"
@@ -201,7 +196,6 @@ def users(request):
         return Response({'detail': 'you have no access to create user'}, status=status.HTTP_403_FORBIDDEN)
 
     if request.method == 'PUT':
-        time.sleep(1)
         if request.data.get('id'):
             r_elduser = Elduser.objects.values('update_user').get(user_id=request.user.id)
             # set user role
@@ -227,6 +221,40 @@ def users(request):
         return Response({'detail': '"id" is required to update user'}, status=status.HTTP_400_BAD_REQUEST)
 
 
+@api_view(['GET', 'POST', 'PUT'])
+@permission_classes([AllowAny])
+def driver_log(request):
+    time.sleep(1)
+    if request.method == 'GET':
+        # get elduser's fields
+        elduser = Elduser.objects.values('company_id').get(user_id=request.user.id)
+        # get details
+        id = request.GET.get('id')
+        date = request.GET.get('date')
+        if id and date:
+            # check if driver is in requester user's company
+            driver = Driver.objects.values('company_id').get(pk=id)
+            if driver['company_id'] == elduser['company_id']:
+                logs = Log.objects.filter(driver_id = id, date=date)
+                log_serializer = DriverLogSerializer(logs, many=True)
+                return Response(log_serializer.data, status=status.HTTP_200_OK)
+            return Response({'detail': 'you have no access to get this driver'}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'detail': '"id" and "date" are required'}, status=status.HTTP_400_BAD_REQUEST)
+
+    if request.method == 'POST':
+        elduser = Elduser.objects.values('company_id', 'create_driver_log').get(user_id=request.user.id)
+        # check if user has access to create a new user
+        if elduser['create_driver_log']:
+            # serialization
+            log_serializer = UserCreateSerializer(data=request.data)
+            # data validation
+            if log_serializer.is_valid():
+                log_serializer.save()
+                return Response({'success': 'log has been succesfully created'}, status=status.HTTP_201_CREATED)
+            return Response(log_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'detail': 'you have no access to create log'}, status=status.HTTP_403_FORBIDDEN)
+
+    
 
 
 
